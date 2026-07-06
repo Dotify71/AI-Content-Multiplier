@@ -49,7 +49,35 @@ export default function Dashboard() {
 
   return (
     <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
-      {!result ? (
+      {loading ? (
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Analyzing Video & Cloning Voice...</h2>
+            <p style={{ color: 'var(--text-secondary)' }}>This usually takes about 20-30 seconds.</p>
+          </div>
+          
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
+            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
+            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
+            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
+          </div>
+
+          <div style={{ background: '#ffffff', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="skeleton-light" style={{ width: '100%', height: '400px', borderRadius: '0' }}></div>
+            <div style={{ padding: '60px 80px' }}>
+               <div className="skeleton-light" style={{ width: '80%', height: '48px', marginBottom: '32px' }}></div>
+               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton-light" style={{ width: '90%', height: '20px', marginBottom: '40px' }}></div>
+               
+               <div className="skeleton-light" style={{ width: '60%', height: '32px', marginBottom: '24px' }}></div>
+               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton-light" style={{ width: '95%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton-light" style={{ width: '85%', height: '20px', marginBottom: '16px' }}></div>
+            </div>
+          </div>
+        </div>
+      ) : !result ? (
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '8px' }}>Create Content Pack</h1>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '40px' }}>Enter a YouTube video and a sample of your writing style.</p>
