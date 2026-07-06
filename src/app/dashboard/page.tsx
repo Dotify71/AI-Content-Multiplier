@@ -62,18 +62,18 @@ export default function Dashboard() {
             <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
           </div>
 
-          <div style={{ background: '#ffffff', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <div className="skeleton-light" style={{ width: '100%', height: '400px', borderRadius: '0' }}></div>
+          <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="skeleton" style={{ width: '100%', height: '400px', borderRadius: '0' }}></div>
             <div style={{ padding: '60px 80px' }}>
-               <div className="skeleton-light" style={{ width: '80%', height: '48px', marginBottom: '32px' }}></div>
-               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton-light" style={{ width: '90%', height: '20px', marginBottom: '40px' }}></div>
+               <div className="skeleton" style={{ width: '80%', height: '48px', marginBottom: '32px' }}></div>
+               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton" style={{ width: '90%', height: '20px', marginBottom: '40px' }}></div>
                
-               <div className="skeleton-light" style={{ width: '60%', height: '32px', marginBottom: '24px' }}></div>
-               <div className="skeleton-light" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton-light" style={{ width: '95%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton-light" style={{ width: '85%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton" style={{ width: '60%', height: '32px', marginBottom: '24px' }}></div>
+               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton" style={{ width: '95%', height: '20px', marginBottom: '16px' }}></div>
+               <div className="skeleton" style={{ width: '85%', height: '20px', marginBottom: '16px' }}></div>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function Dashboard() {
 
           <div className="fade-in-up">
             {activeTab === 'blog' && (
-              <div style={{ background: '#ffffff', color: '#111', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 {thumbnailUrl && (
                   <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} />
                 )}
