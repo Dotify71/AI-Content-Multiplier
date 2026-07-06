@@ -1,38 +1,36 @@
-import Link from 'next/link';
-
 export default function TermsPage() {
   return (
-    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-block', marginBottom: '32px' }}>
-          ← Back to Home
-        </Link>
+    <div className="main-container fade-in-up" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
+      <div className="glass-panel" style={{ maxWidth: '800px', margin: '0 auto', padding: '60px' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '24px' }}>Terms of Service</h1>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '40px' }}>Last updated: July 2026</p>
         
-        <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '16px' }}>Terms of Service</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '48px' }}>Last updated: {new Date().toLocaleDateString()}</p>
-
-        <div className="glass-panel" style={{ padding: '40px' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>1. Acceptance of Terms</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', lineHeight: 1.7 }}>
-            By accessing and using ContentMultiplier, you accept and agree to be bound by the terms and provision of this agreement.
+        <div style={{ lineHeight: 1.8, color: '#e5e7eb' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>1. Acceptance of Terms</h2>
+          <p style={{ marginBottom: '24px' }}>
+            By accessing and using ContentMultiplier ("the Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you may not access the Service.
           </p>
 
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>2. User Responsibility & Content Generation</h2>
-          <div style={{ padding: '24px', background: 'rgba(239, 68, 68, 0.05)', borderLeft: '4px solid #ef4444', borderRadius: '4px', marginBottom: '32px' }}>
-            <p style={{ color: '#ef4444', fontWeight: 600, marginBottom: '8px' }}>IMPORTANT DISCLAIMER</p>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.95rem', margin: 0 }}>
-              ContentMultiplier is an AI-powered formatting tool. We do not claim ownership of the content you generate using our service. <strong>It is your sole responsibility to ensure that the content you publish to your personal accounts, blogs, or social media platforms does not violate any copyright laws, platform terms of service, or community guidelines.</strong> We take no responsibility for copyright strikes, plagiarism claims, or account bans that may arise from your use of the generated content.
-            </p>
-          </div>
-
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>3. Prohibited Uses</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', lineHeight: 1.7 }}>
-            You may not use our service for any illegal or unauthorized purpose. You must not, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>2. Description of Service</h2>
+          <p style={{ marginBottom: '24px' }}>
+            ContentMultiplier provides an AI-powered tool that converts YouTube video URLs into written content formats, such as blog posts, LinkedIn posts, and tweets. The Service requires a valid YouTube URL and an optional writing sample.
           </p>
 
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>4. Termination</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '0', lineHeight: 1.7 }}>
-            We reserve the right to terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>3. User Obligations</h2>
+          <ul style={{ paddingLeft: '24px', marginBottom: '24px' }}>
+            <li>You must not use the Service for any illegal or unauthorized purpose.</li>
+            <li>You must not violate any laws in your jurisdiction (including but not limited to copyright laws).</li>
+            <li>You are responsible for safeguarding the password that you use to access the Service.</li>
+          </ul>
+
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>4. Intellectual Property</h2>
+          <p style={{ marginBottom: '24px' }}>
+            The content generated by the Service is provided to you for your own use. However, you are solely responsible for ensuring that your use of the generated content does not infringe on the intellectual property rights of the original video creators or any third parties.
+          </p>
+          
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>5. Limitation of Liability</h2>
+          <p style={{ marginBottom: '24px' }}>
+            In no event shall ContentMultiplier, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
           </p>
         </div>
       </div>
