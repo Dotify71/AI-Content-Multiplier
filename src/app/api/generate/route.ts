@@ -23,8 +23,25 @@ export async function POST(req: Request) {
     const tier = profile?.tier || 'free';
     
     // Quick MVP rate limiting based on tier
-    const { count } = await supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
-    const limit = tier === 'unlimited' ? Infinity : tier === 'pro' ? 100 : tier === 'basic' ? 10 : 3;
+    let query = supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+    let limit = 3;
+    const now = new Date();
+    
+    if (tier === 'basic') {
+        limit = 5; // 5 per week
+        const dayOfWeek = now.getUTCDay();
+        const diffToMonday = now.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        const startOfWeekUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), diffToMonday)).toISOString();
+        query = query.gte('created_at', startOfWeekUTC);
+    } else if (tier === 'pro') {
+        limit = 10; // 10 per day
+        const startOfDayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
+        query = query.gte('created_at', startOfDayUTC);
+    } else if (tier === 'unlimited') {
+        limit = Infinity;
+    }
+    
+    const { count } = await query;
     
     if (count !== null && count >= limit) {
         return NextResponse.json({ error: `You have reached your limit for the ${tier} tier. Please upgrade to generate more.` }, { status: 403 });

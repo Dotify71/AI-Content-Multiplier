@@ -20,12 +20,24 @@ export default function DashboardNavbar() {
         return;
       }
       
-      const [profileRes, packsRes] = await Promise.all([
-        supabase.from('profiles').select('tier').eq('id', user.id).single(),
-        supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id)
-      ]);
+      const profileRes = await supabase.from('profiles').select('tier').eq('id', user.id).single();
+      const currentTier = profileRes.data?.tier || 'free';
+      setTier(currentTier);
 
-      if (profileRes.data) setTier(profileRes.data.tier || 'free');
+      let query = supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
+      const now = new Date();
+      
+      if (currentTier === 'basic') {
+        const dayOfWeek = now.getUTCDay();
+        const diffToMonday = now.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        const startOfWeekUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), diffToMonday)).toISOString();
+        query = query.gte('created_at', startOfWeekUTC);
+      } else if (currentTier === 'pro') {
+        const startOfDayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
+        query = query.gte('created_at', startOfDayUTC);
+      }
+
+      const packsRes = await query;
       if (packsRes.count !== null) setUsage(packsRes.count);
       setLoading(false);
     };
@@ -37,7 +49,7 @@ export default function DashboardNavbar() {
     router.push('/');
   };
 
-  const limit = tier === 'unlimited' ? '∞' : tier === 'pro' ? 100 : tier === 'basic' ? 10 : 3;
+  const limit = tier === 'unlimited' ? '∞' : tier === 'pro' ? 10 : tier === 'basic' ? 5 : 3;
 
   return (
     <nav style={{
