@@ -10,6 +10,13 @@ export default function Dashboard() {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("blog");
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const getYoutubeVideoId = (url: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -146,14 +153,26 @@ export default function Dashboard() {
                 {thumbnailUrl && (
                   <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} />
                 )}
-                <div style={{ padding: '60px 80px' }} className="blog-content">
+                <div style={{ padding: '60px 80px', position: 'relative' }} className="blog-content">
+                  <button 
+                     onClick={() => handleCopy(result.blogPost, 'blog')}
+                     style={{ position: 'absolute', top: '24px', right: '24px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                   >
+                     {copied === 'blog' ? '✓ Copied!' : '📋 Copy Markdown'}
+                  </button>
                    <ReactMarkdown>{result.blogPost}</ReactMarkdown>
                 </div>
               </div>
             )}
 
             {activeTab === 'linkedin' && (
-              <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', background: 'rgba(255,255,255,0.02)' }}>
+              <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
+                <button 
+                  onClick={() => handleCopy(result.linkedinPost, 'linkedin')}
+                  style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
+                >
+                  {copied === 'linkedin' ? '✓ Copied!' : '📋 Copy'}
+                </button>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
                   <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
                   <div>
@@ -170,7 +189,13 @@ export default function Dashboard() {
             {activeTab === 'twitter' && (
               <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 {result.tweets.map((tweet: string, i: number) => (
-                  <div key={i} className="glass-panel" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                  <div key={i} className="glass-panel" style={{ background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
+                    <button 
+                      onClick={() => handleCopy(tweet, `tweet-${i}`)}
+                      style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
+                    >
+                      {copied === `tweet-${i}` ? '✓ Copied!' : '📋 Copy'}
+                    </button>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
                       <div>
