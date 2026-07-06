@@ -34,22 +34,33 @@ export default function PricingPage() {
           description: `Upgrade to ${tier.toUpperCase()} tier`,
           order_id: order.id,
           handler: async function (response: any) {
-            const verifyRes = await fetch('/api/verify-payment', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                tier
-              })
-            });
-            const verifyData = await verifyRes.json();
-            if (verifyRes.ok) {
-              alert("Payment successful! Your account has been upgraded.");
-              router.push('/dashboard');
-            } else {
-              alert("Payment verification failed: " + verifyData.error);
+            try {
+              const verifyRes = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  tier
+                })
+              });
+              
+              let verifyData;
+              try {
+                verifyData = await verifyRes.json();
+              } catch (e) {
+                throw new Error("The server crashed while verifying the payment. Check your terminal for errors.");
+              }
+
+              if (verifyRes.ok) {
+                alert("Payment successful! Your account has been upgraded.");
+                window.location.href = '/dashboard';
+              } else {
+                alert("Payment verification failed: " + verifyData.error);
+              }
+            } catch (err: any) {
+              alert(err.message);
             }
           },
           theme: { color: "#8b5cf6" }
