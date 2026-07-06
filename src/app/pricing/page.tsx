@@ -129,6 +129,10 @@ export default function PricingPage() {
               <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
                 Your current plan
               </button>
+            ) : (currentTier === 'pro' || currentTier === 'unlimited') ? (
+              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
+                Included in your plan
+              </button>
             ) : (
               <button onClick={() => handleUpgrade('basic')} disabled={loading === 'basic'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
                 {loading === 'basic' ? 'Loading...' : 'Get Started'}
@@ -169,6 +173,10 @@ export default function PricingPage() {
             {currentTier === 'pro' ? (
               <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
                 Your current plan
+              </button>
+            ) : (currentTier === 'unlimited') ? (
+              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
+                Included in your plan
               </button>
             ) : (
               <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className="pricing-btn" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
