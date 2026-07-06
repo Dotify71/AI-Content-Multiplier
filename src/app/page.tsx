@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
@@ -19,35 +21,35 @@ export default function Home() {
         </p>
         
         <div className="fade-in-up delay-3" style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-          <button className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 32px' }}>Start Generating Free</button>
-          <button style={{ background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', padding: '16px 32px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '1.1rem', transition: 'background 0.2s' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>See Examples</button>
+          <Link href="/dashboard" className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 32px', display: 'inline-block' }}>Start Generating Free</Link>
+          <button className="btn-secondary">See Examples</button>
         </div>
       </section>
 
       {/* How it works Section */}
       <section className="main-container fade-in-up delay-3" style={{ paddingBottom: '120px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '16px' }}>How it works</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>From a single video to a week of content in 30 seconds.</p>
+        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '16px' }}>The Workflow</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>Zero prompt engineering required. Just plug and play.</p>
         </div>
         
         <div className="feature-grid">
-          <div className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🎥</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>1. Paste Video</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Drop any YouTube URL. We instantly extract the transcript and core ideas.</p>
+          <div className="glass-panel" style={{ transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '5rem', fontWeight: 800, color: 'rgba(255,255,255,0.04)', position: 'absolute', top: '-15px', right: '10px', lineHeight: 1, userSelect: 'none' }}>01</div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '12px', color: 'var(--text-primary)', position: 'relative' }}>Input Video</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, position: 'relative' }}>We bypass standard summaries. Our engine extracts the raw transcript, preserving the nuanced context and core arguments of the original video.</p>
           </div>
           
-          <div className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🧠</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>2. Clone Your Voice</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Provide a short sample of your past writing. Our AI maps your unique tone, pacing, and vocabulary.</p>
+          <div className="glass-panel" style={{ transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '5rem', fontWeight: 800, color: 'rgba(255,255,255,0.04)', position: 'absolute', top: '-15px', right: '10px', lineHeight: 1, userSelect: 'none' }}>02</div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '12px', color: 'var(--text-primary)', position: 'relative' }}>Style Mapping</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, position: 'relative' }}>Our models analyze your provided writing sample to construct a custom persona vector, ensuring the output perfectly mirrors your unique cadence.</p>
           </div>
           
-          <div className="glass-panel" style={{ transition: 'all 0.3s ease' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🚀</div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>3. Get Content Pack</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Instantly receive a ready-to-publish blog post, LinkedIn carousel, and Twitter thread.</p>
+          <div className="glass-panel" style={{ transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '5rem', fontWeight: 800, color: 'rgba(255,255,255,0.04)', position: 'absolute', top: '-15px', right: '10px', lineHeight: 1, userSelect: 'none' }}>03</div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '12px', color: 'var(--text-primary)', position: 'relative' }}>Content Generation</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, position: 'relative' }}>Within seconds, receive a multi-platform content suite: a long-form article, a structured thread, and highly engaging social posts.</p>
           </div>
         </div>
       </section>

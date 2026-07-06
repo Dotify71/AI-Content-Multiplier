@@ -56,6 +56,22 @@ a {
   box-shadow: 0 6px 20px var(--accent-glow);
 }
 
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 16px 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
