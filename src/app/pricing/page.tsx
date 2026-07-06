@@ -110,6 +110,12 @@ export default function PricingPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', textAlign: 'left' }}>
           
+          {(() => {
+            const isProHighlighted = currentTier !== 'pro' && currentTier !== 'unlimited';
+            const isUnlimitedHighlighted = currentTier === 'pro';
+
+            return (
+              <>
           {/* Basic Tier */}
           <div className="pricing-card">
             {/* SVG Icon matching Claude's aesthetic */}
@@ -157,8 +163,8 @@ export default function PricingPage() {
           </div>
 
           {/* Pro Tier */}
-          <div className="pricing-card" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.15)' }}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth="1.5" style={{ marginBottom: '32px' }}>
+          <div className="pricing-card" style={isProHighlighted ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.15)' } : {}}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={isProHighlighted ? "var(--text-primary)" : "var(--text-secondary)"} strokeWidth="1.5" style={{ marginBottom: '32px' }}>
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
             </svg>
 
@@ -179,7 +185,7 @@ export default function PricingPage() {
                 Included in your plan
               </button>
             ) : (
-              <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className="pricing-btn" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
+              <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className={isProHighlighted ? "pricing-btn" : "pricing-btn-outline"} style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
                 {loading === 'pro' ? 'Loading...' : 'Start Pro'}
               </button>
             )}
@@ -202,8 +208,8 @@ export default function PricingPage() {
           </div>
 
           {/* Unlimited/Max Tier */}
-          <div className="pricing-card">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="1.5" style={{ marginBottom: '32px' }}>
+          <div className="pricing-card" style={isUnlimitedHighlighted ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.15)' } : {}}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={isUnlimitedHighlighted ? "var(--text-primary)" : "var(--text-secondary)"} strokeWidth="1.5" style={{ marginBottom: '32px' }}>
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
               <path d="M2 12h20"/>
@@ -222,7 +228,7 @@ export default function PricingPage() {
                 Your current plan
               </button>
             ) : (
-              <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
+              <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className={isUnlimitedHighlighted ? "pricing-btn" : "pricing-btn-outline"} style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
                 {loading === 'unlimited' ? 'Loading...' : 'Start Unlimited'}
               </button>
             )}
@@ -243,6 +249,9 @@ export default function PricingPage() {
               </div>
             </div>
           </div>
+              </>
+            );
+          })()}
 
         </div>
       </div>
