@@ -1,12 +1,26 @@
 "use client";
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [currentTier, setCurrentTier] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchTier = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase.from('profiles').select('tier').eq('id', user.id).single();
+        if (data) setCurrentTier(data.tier);
+      }
+    };
+    fetchTier();
+  }, []);
 
   const handleUpgrade = async (tier: string) => {
     setLoading(tier);
@@ -79,12 +93,18 @@ export default function PricingPage() {
     }
   };
   return (
-    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
+    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px', position: 'relative' }}>
+      <Link href="/dashboard" style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', transition: 'all 0.2s', cursor: 'pointer' }}
+        onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+        onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </Link>
+      
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-block', marginBottom: '32px' }}>
-          ← Back to Home
-        </Link>
-        
         <h1 style={{ fontSize: '3rem', fontWeight: 600, marginBottom: '16px', letterSpacing: '-0.02em' }}>Plans & Pricing</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '64px', fontSize: '1.1rem' }}>Stop spending 10 hours a week on content. Let AI do it in 30 seconds.</p>
 
@@ -105,9 +125,15 @@ export default function PricingPage() {
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month. Billed monthly.</p>
             
-            <button onClick={() => handleUpgrade('basic')} disabled={loading === 'basic'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
-              {loading === 'basic' ? 'Loading...' : 'Get Started'}
-            </button>
+            {currentTier === 'basic' ? (
+              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
+                Your current plan
+              </button>
+            ) : (
+              <button onClick={() => handleUpgrade('basic')} disabled={loading === 'basic'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
+                {loading === 'basic' ? 'Loading...' : 'Get Started'}
+              </button>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Includes:</div>
@@ -140,9 +166,15 @@ export default function PricingPage() {
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month with annual subscription discount ($80 billed up front). $10 if billed monthly.</p>
             
-            <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className="pricing-btn" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
-              {loading === 'pro' ? 'Loading...' : 'Start Pro'}
-            </button>
+            {currentTier === 'pro' ? (
+              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
+                Your current plan
+              </button>
+            ) : (
+              <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className="pricing-btn" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
+                {loading === 'pro' ? 'Loading...' : 'Start Pro'}
+              </button>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Basic, plus:</div>
@@ -177,9 +209,15 @@ export default function PricingPage() {
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month.</p>
             
-            <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
-              {loading === 'unlimited' ? 'Loading...' : 'Start Unlimited'}
-            </button>
+            {currentTier === 'unlimited' ? (
+              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
+                Your current plan
+              </button>
+            ) : (
+              <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
+                {loading === 'unlimited' ? 'Loading...' : 'Start Unlimited'}
+              </button>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Pro, plus:</div>
