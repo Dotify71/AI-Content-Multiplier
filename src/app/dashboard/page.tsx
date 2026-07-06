@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
+import { createClient } from '@/utils/supabase/client';
 
 export default function Dashboard() {
   const [url, setUrl] = useState("");
@@ -11,6 +12,14 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("blog");
   const [copied, setCopied] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState("");
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email) setUserEmail(user.email);
+    });
+  }, []);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -176,7 +185,7 @@ export default function Dashboard() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
                   <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
                   <div>
-                    <div style={{ fontWeight: 600 }}>Your Name</div>
+                    <div style={{ fontWeight: 600 }}>{userEmail ? userEmail.split('@')[0] : 'Your Name'}</div>
                     <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Just now • 🌍</div>
                   </div>
                 </div>
@@ -199,8 +208,8 @@ export default function Dashboard() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                       <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
                       <div>
-                        <div style={{ fontWeight: 600 }}>Your Name</div>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>@yourhandle</div>
+                        <div style={{ fontWeight: 600 }}>{userEmail ? userEmail.split('@')[0] : 'Your Name'}</div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>@{userEmail ? userEmail.split('@')[0] : 'yourhandle'}</div>
                       </div>
                     </div>
                     <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.5, fontSize: '1.1rem', color: '#ddd' }}>
