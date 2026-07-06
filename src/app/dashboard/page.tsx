@@ -43,7 +43,7 @@ export default function Dashboard() {
       
       if (!response.ok) throw new Error(data.error || 'Failed to generate content');
       
-      setResult(data.data);
+      setResult(data);
     } catch (err: any) {
       setError(err.message);
     } finally {
