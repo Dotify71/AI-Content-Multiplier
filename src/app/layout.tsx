@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "../components/Footer";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Content Multiplier AI",
@@ -13,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         <nav style={{ padding: '24px 0', borderBottom: '1px solid var(--glass-border)' }}>
           <div className="main-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '-0.5px' }}>
@@ -27,9 +31,7 @@ export default function RootLayout({
         <main style={{ flex: 1 }}>
           {children}
         </main>
-        <footer style={{ padding: '40px 0', textAlign: 'center', color: 'var(--text-secondary)', borderTop: '1px solid var(--glass-border)', fontSize: '0.9rem' }}>
-          © {new Date().getFullYear()} Content Multiplier. All rights reserved.
-        </footer>
+        <Footer />
       </body>
     </html>
   );

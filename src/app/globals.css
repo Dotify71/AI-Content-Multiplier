@@ -151,6 +151,63 @@ a {
   100% { background-position: -200% 0; }
 }
 
+/* Claude Style Pricing Cards */
+.pricing-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  min-height: 650px; /* Long card like Claude */
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px); /* Very subtle, slow card pop */
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.pricing-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #000000;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.pricing-card:hover .pricing-btn {
+  transform: translateY(-4px) scale(1.02); /* Button pops independently on hover */
+  box-shadow: 0 8px 20px rgba(255,255,255,0.2);
+}
+
+.pricing-btn-outline {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.4s ease, background 0.4s ease;
+}
+
+.pricing-card:hover .pricing-btn-outline {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px) scale(1.02);
+}
+
 /* Spinner for loading state */
 .spinner {
   display: inline-block;
