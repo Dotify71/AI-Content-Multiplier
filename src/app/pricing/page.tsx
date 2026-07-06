@@ -1,6 +1,72 @@
+"use client";
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function PricingPage() {
+  const [loading, setLoading] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleUpgrade = async (tier: string) => {
+    setLoading(tier);
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier })
+      });
+      const order = await res.json();
+      
+      if (!res.ok) throw new Error(order.error || 'Failed to create order');
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: order.currency,
+          name: "ContentMultiplier",
+          description: `Upgrade to ${tier.toUpperCase()} tier`,
+          order_id: order.id,
+          handler: async function (response: any) {
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                tier
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyRes.ok) {
+              alert("Payment successful! Your account has been upgraded.");
+              router.push('/dashboard');
+            } else {
+              alert("Payment verification failed: " + verifyData.error);
+            }
+          },
+          theme: { color: "#8b5cf6" }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: any){
+          alert("Payment failed: " + response.error.description);
+        });
+        rzp.open();
+      };
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(null);
+    }
+  };
   return (
     <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -24,13 +90,13 @@ export default function PricingPage() {
             <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>For casual creators starting out</p>
             
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>$4</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹499</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month. Billed monthly.</p>
             
-            <Link href="/login" className="pricing-btn-outline" style={{ marginBottom: '40px' }}>
-              Get Started
-            </Link>
+            <button onClick={() => handleUpgrade('basic')} disabled={loading === 'basic'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
+              {loading === 'basic' ? 'Loading...' : 'Get Started'}
+            </button>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Includes:</div>
@@ -59,13 +125,13 @@ export default function PricingPage() {
             <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>For everyday productivity</p>
             
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>$8</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹999</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month with annual subscription discount ($80 billed up front). $10 if billed monthly.</p>
             
-            <Link href="/login" className="pricing-btn" style={{ marginBottom: '40px' }}>
-              Start Pro
-            </Link>
+            <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className="pricing-btn" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
+              {loading === 'pro' ? 'Loading...' : 'Start Pro'}
+            </button>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Basic, plus:</div>
@@ -96,13 +162,13 @@ export default function PricingPage() {
             <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>Get the most out of ContentMultiplier</p>
             
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>$15</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹1999</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month.</p>
             
-            <Link href="/login" className="pricing-btn-outline" style={{ marginBottom: '40px' }}>
-              Start Unlimited
-            </Link>
+            <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem' }}>
+              {loading === 'unlimited' ? 'Loading...' : 'Start Unlimited'}
+            </button>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Pro, plus:</div>
