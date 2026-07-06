@@ -20,12 +20,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <nav style={{ padding: '24px 0', borderBottom: '1px solid var(--glass-border)' }}>
           <div className="main-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '-0.5px' }}>
+            <Link href="/" style={{ fontWeight: 'bold', fontSize: '1.2rem', letterSpacing: '-0.5px', textDecoration: 'none', color: 'inherit' }}>
               Content<span style={{ color: 'var(--accent-solid)' }}>Multiplier</span>
-            </div>
-            <div>
-              <button style={{ background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>Login</button>
-            </div>
+            </Link>
+            <Link href="/login" className="btn-secondary" style={{ padding: '8px 24px', fontSize: '0.9rem', textDecoration: 'none' }}>
+              Login
+            </Link>
           </div>
         </nav>
         <main style={{ flex: 1 }}>

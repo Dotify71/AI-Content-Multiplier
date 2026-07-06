@@ -6,16 +6,29 @@ import { useState } from 'react';
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    try {
+      setLoading(true);
+      setAuthError("");
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setAuthError(error.message);
+        setLoading(false);
+      }
+    } catch (err: any) {
+      setAuthError(err.message || "A critical error occurred while trying to connect to Supabase.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +55,12 @@ export default function LoginPage() {
             </svg>
             {loading ? 'Redirecting...' : 'Continue with Google'}
           </button>
+
+          {authError && (
+            <div style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '0.9rem', textAlign: 'center' }}>
+              Error: {authError}
+            </div>
+          )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
             <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
