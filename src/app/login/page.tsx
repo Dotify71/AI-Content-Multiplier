@@ -7,6 +7,9 @@ import { useState } from 'react';
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
@@ -28,6 +31,31 @@ export default function LoginPage() {
     } catch (err: any) {
       setAuthError(err.message || "A critical error occurred while trying to connect to Supabase.");
       setLoading(false);
+    }
+  };
+
+  const handleEmailLogin = async () => {
+    if (!email) return;
+    try {
+      setEmailLoading(true);
+      setAuthError("");
+      
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        setEmailSent(true);
+      }
+    } catch (err: any) {
+      setAuthError(err.message || "A critical error occurred");
+    } finally {
+      setEmailLoading(false);
     }
   };
 
@@ -72,13 +100,20 @@ export default function LoginPage() {
             <label style={{ display: 'block', fontWeight: 500, marginBottom: '8px', fontSize: '0.9rem' }}>Email address</label>
             <input 
               type="email" 
-              placeholder="you@example.com" 
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
             />
           </div>
 
-          <button className="btn-primary" style={{ width: '100%', padding: '14px', fontSize: '1rem' }}>
-            Sign In
+          <button 
+            className="btn-primary" 
+            onClick={handleEmailLogin}
+            disabled={emailLoading || emailSent}
+            style={{ width: '100%', padding: '14px', fontSize: '1rem', opacity: (emailLoading || emailSent) ? 0.7 : 1, cursor: (emailLoading || emailSent) ? 'not-allowed' : 'pointer' }}
+          >
+            {emailSent ? 'Check your inbox! ✨' : emailLoading ? 'Sending...' : 'Sign In with Magic Link'}
           </button>
         </div>
         
