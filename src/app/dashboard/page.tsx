@@ -64,6 +64,7 @@ export default function Dashboard() {
       if (!response.ok) throw new Error(data.error || 'Failed to generate content');
       
       setResult(data);
+      window.dispatchEvent(new Event('contentGenerated'));
     } catch (err: any) {
       setError(err.message);
     } finally {

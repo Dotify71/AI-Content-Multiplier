@@ -44,6 +44,14 @@ export default function DashboardNavbar() {
     fetchUserData();
   }, [router, supabase]);
 
+  useEffect(() => {
+    const handleContentGenerated = () => {
+      setUsage(prev => prev + 1);
+    };
+    window.addEventListener('contentGenerated', handleContentGenerated);
+    return () => window.removeEventListener('contentGenerated', handleContentGenerated);
+  }, []);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/');
