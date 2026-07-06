@@ -70,12 +70,17 @@ export default function DashboardNavbar() {
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       flexWrap: 'wrap', gap: '16px'
     }}>
-      {/* Brand */}
-      <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-        <span style={{ fontSize: '1.2rem', fontWeight: 700, background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          ContentMultiplier
-        </span>
-      </Link>
+      {/* Brand & Navigation */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+        <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: 700, background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            ContentMultiplier
+          </span>
+        </Link>
+        <Link href="/dashboard/history" style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.95rem', fontWeight: 500, transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+          History
+        </Link>
+      </div>
 
       {/* Center: Usage Tracker */}
       {!loading && (
