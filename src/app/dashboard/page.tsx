@@ -50,6 +50,16 @@ export default function Dashboard() {
       });
       const data = await response.json();
       
+      if (response.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      
+      if (response.status === 403) {
+        window.location.href = '/pricing';
+        return;
+      }
+      
       if (!response.ok) throw new Error(data.error || 'Failed to generate content');
       
       setResult(data);

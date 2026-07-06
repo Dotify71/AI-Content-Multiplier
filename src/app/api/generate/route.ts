@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     
     // Quick MVP rate limiting based on tier
     const { count } = await supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
-    const limit = tier === 'unlimited' ? Infinity : tier === 'pro' ? 100 : tier === 'basic' ? 10 : 1;
+    const limit = tier === 'unlimited' ? Infinity : tier === 'pro' ? 100 : tier === 'basic' ? 10 : 3;
     
     if (count !== null && count >= limit) {
         return NextResponse.json({ error: `You have reached your limit for the ${tier} tier. Please upgrade to generate more.` }, { status: 403 });
