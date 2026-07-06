@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/utils/supabase/client';
+import DashboardNavbar from '@/components/DashboardNavbar';
 
 export default function Dashboard() {
   const [url, setUrl] = useState("");
@@ -74,8 +75,10 @@ export default function Dashboard() {
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
 
   return (
-    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
-      {loading ? (
+    <>
+      <DashboardNavbar />
+      <div className="main-container fade-in-up delay-1" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
+        {loading ? (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Analyzing Video & Cloning Voice...</h2>
@@ -233,5 +236,6 @@ export default function Dashboard() {
         </div>
       )}
     </div>
+    </>
   );
 }
