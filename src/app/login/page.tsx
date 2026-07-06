@@ -8,8 +8,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
@@ -34,23 +34,25 @@ export default function LoginPage() {
     }
   };
 
-  const handleEmailLogin = async () => {
-    if (!email) return;
+  const handlePasswordLogin = async () => {
+    if (!email || !password) return;
     try {
       setEmailLoading(true);
       setAuthError("");
       
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+      // Try to sign in
+      let { error } = await supabase.auth.signInWithPassword({ email, password });
+      
+      // If the user doesn't exist, sign them up instead!
+      if (error && error.message.includes("Invalid login credentials")) {
+         const { error: signUpError } = await supabase.auth.signUp({ email, password });
+         error = signUpError;
+      }
 
       if (error) {
         setAuthError(error.message);
       } else {
-        setEmailSent(true);
+        window.location.href = '/dashboard';
       }
     } catch (err: any) {
       setAuthError(err.message || "A critical error occurred");
@@ -103,17 +105,25 @@ export default function LoginPage() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none', marginBottom: '16px' }}
+            />
+            <label style={{ display: 'block', fontWeight: 500, marginBottom: '8px', fontSize: '0.9rem' }}>Password</label>
+            <input 
+              type="password" 
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
             />
           </div>
 
           <button 
             className="btn-primary" 
-            onClick={handleEmailLogin}
-            disabled={emailLoading || emailSent}
-            style={{ width: '100%', padding: '14px', fontSize: '1rem', opacity: (emailLoading || emailSent) ? 0.7 : 1, cursor: (emailLoading || emailSent) ? 'not-allowed' : 'pointer' }}
+            onClick={handlePasswordLogin}
+            disabled={emailLoading || !email || !password}
+            style={{ width: '100%', padding: '14px', fontSize: '1rem', opacity: (emailLoading || !email || !password) ? 0.7 : 1, cursor: (emailLoading || !email || !password) ? 'not-allowed' : 'pointer' }}
           >
-            {emailSent ? 'Check your inbox! ✨' : emailLoading ? 'Sending...' : 'Sign In with Magic Link'}
+            {emailLoading ? 'Authenticating...' : 'Sign In / Sign Up'}
           </button>
         </div>
         
