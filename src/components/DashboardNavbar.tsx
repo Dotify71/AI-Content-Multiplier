@@ -11,6 +11,7 @@ export default function DashboardNavbar() {
   const [tier, setTier] = useState<string>('free');
   const [usage, setUsage] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -18,6 +19,10 @@ export default function DashboardNavbar() {
       if (!user) {
         router.push('/login');
         return;
+      }
+      
+      if (user.email) {
+        setEmail(user.email);
       }
       
       const profileRes = await supabase.from('profiles').select('tier').eq('id', user.id).single();
@@ -96,6 +101,17 @@ export default function DashboardNavbar() {
 
       {/* Right: Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {email && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--accent-solid)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {email.charAt(0).toUpperCase()}
+            </div>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              {email}
+            </span>
+          </div>
+        )}
+
         {tier !== 'unlimited' && tier !== 'pro' && (
           <Link href="/pricing" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>
             Upgrade
