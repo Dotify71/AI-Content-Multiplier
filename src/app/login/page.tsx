@@ -75,7 +75,7 @@ export default function LoginPage() {
           <button 
             onClick={handleGoogleLogin}
             disabled={loading}
-            style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, marginBottom: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}
+            style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}
           >
             <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -87,49 +87,12 @@ export default function LoginPage() {
           </button>
 
           {authError && (
-            <div style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '0.9rem', textAlign: 'center' }}>
+            <div style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '12px', borderRadius: '8px', marginTop: '24px', fontSize: '0.9rem', textAlign: 'center' }}>
               Error: {authError}
             </div>
           )}
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-            <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>or</span>
-            <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontWeight: 500, marginBottom: '8px', fontSize: '0.9rem' }}>Email address</label>
-            <input 
-              type="email" 
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none', marginBottom: '16px' }}
-            />
-            <label style={{ display: 'block', fontWeight: 500, marginBottom: '8px', fontSize: '0.9rem' }}>Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '14px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
-            />
-          </div>
-
-          <button 
-            className="btn-primary" 
-            onClick={handlePasswordLogin}
-            disabled={emailLoading || !email || !password}
-            style={{ width: '100%', padding: '14px', fontSize: '1rem', opacity: (emailLoading || !email || !password) ? 0.7 : 1, cursor: (emailLoading || !email || !password) ? 'not-allowed' : 'pointer' }}
-          >
-            {emailLoading ? 'Authenticating...' : 'Sign In / Sign Up'}
-          </button>
         </div>
         
-        <p style={{ textAlign: 'center', marginTop: '24px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-          Don't have an account? <Link href="/login" style={{ color: '#fff' }}>Sign up</Link>
-        </p>
       </div>
     </div>
   );
