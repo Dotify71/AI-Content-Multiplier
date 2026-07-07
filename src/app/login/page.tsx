@@ -260,8 +260,8 @@ export default function LoginPage() {
           
           <div className="glass-panel animate-glow" style={{ padding: '50px 40px', borderRadius: '20px', border: '1px solid rgba(255, 255, 255, 0.08)', background: 'rgba(255, 255, 255, 0.02)', backdropFilter: 'blur(20px)', textAlign: 'center', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' }}>
             
-            <div style={{ marginBottom: '40px' }}>
-               <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.04em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '12px' }}>
+            <div style={{ marginBottom: '32px' }}>
+               <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.04em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>
                  ContentMultiplier
                </h1>
                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.5 }}>
@@ -285,7 +285,13 @@ export default function LoginPage() {
               {loading ? 'Redirecting...' : 'Continue with Google'}
             </button>
 
-            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '24px 0' }}>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>or</span>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <input 
                 id="email-input"
                 type="email" 
@@ -306,7 +312,9 @@ export default function LoginPage() {
                 id="password-login-btn"
                 onClick={handlePasswordLogin}
                 disabled={emailLoading}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#8b5cf6', color: '#fff', fontWeight: 'bold', cursor: 'pointer', border: 'none' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#8b5cf6', color: '#fff', fontWeight: 'bold', cursor: 'pointer', border: 'none', transition: 'background-color 0.2s' }}
+                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#7c3aed'; }}
+                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#8b5cf6'; }}
               >
                 {emailLoading ? 'Logging in...' : 'Sign In / Sign Up'}
               </button>
