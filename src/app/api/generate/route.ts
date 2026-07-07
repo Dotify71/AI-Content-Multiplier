@@ -1,7 +1,61 @@
 import { NextResponse } from 'next/server';
-import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
+
+// --- Custom YouTube Transcript Fetcher ---
+function extractVideoId(url: string): string | null {
+  try {
+    // Handle youtu.be/ID format
+    const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (shortMatch) return shortMatch[1];
+    // Handle youtube.com/watch?v=ID format
+    const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (longMatch) return longMatch[1];
+    // Handle bare 11-char ID
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
+  } catch { }
+  return null;
+}
+
+async function fetchYouTubeTranscript(videoId: string): Promise<string> {
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  };
+
+  // Fetch the YouTube watch page to get the player response JSON
+  const pageRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, { headers });
+  const pageHtml = await pageRes.text();
+
+  // Extract ytInitialPlayerResponse JSON
+  const playerResponseMatch = pageHtml.match(/ytInitialPlayerResponse\s*=\s*(\{.+?\})\s*;/);
+  if (!playerResponseMatch) throw new Error('Could not parse YouTube page');
+
+  const playerResponse = JSON.parse(playerResponseMatch[1]);
+  const captionTracks = playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+
+  if (!captionTracks || captionTracks.length === 0) {
+    throw new Error('No captions available for this video');
+  }
+
+  // Prefer English captions, fallback to first available
+  const track = captionTracks.find((t: any) => t.languageCode === 'en') || captionTracks[0];
+  const captionUrl = track.baseUrl + '&fmt=json3';
+
+  const captionRes = await fetch(captionUrl, { headers });
+  const captionData = await captionRes.json();
+
+  const text = captionData.events
+    ?.filter((e: any) => e.segs)
+    .flatMap((e: any) => e.segs.map((s: any) => s.utf8))
+    .join(' ')
+    .replace(/\n/g, ' ')
+    .trim();
+
+  if (!text) throw new Error('Transcript is empty');
+  return text;
+}
 
 export async function POST(req: Request) {
   try {
@@ -51,16 +105,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'GEMINI_API_KEY is not configured on the server.' }, { status: 500 });
     }
 
-    // 1. Fetch Transcript
-    let transcriptItems = [];
-    try {
-      transcriptItems = await YoutubeTranscript.fetchTranscript(url);
-    } catch (e) {
-      console.error(e);
-      return NextResponse.json({ error: 'Failed to extract transcript. Please ensure the video has closed captions.' }, { status: 400 });
+    // 1. Extract Video ID & Fetch Transcript
+    const videoId = extractVideoId(url);
+    if (!videoId) {
+      return NextResponse.json({ error: 'Invalid YouTube URL. Please paste a valid YouTube link.' }, { status: 400 });
     }
 
-    const fullTranscript = transcriptItems.map((item: any) => item.text).join(' ');
+    let fullTranscript = '';
+    try {
+      fullTranscript = await fetchYouTubeTranscript(videoId);
+    } catch (e: any) {
+      console.error('Transcript error:', e?.message);
+      return NextResponse.json({ error: 'Failed to extract transcript. Please ensure the video has English closed captions enabled.' }, { status: 400 });
+    }
 
     // 2. Initialize Gemini API
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
