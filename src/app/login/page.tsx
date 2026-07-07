@@ -228,7 +228,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '90vh', background: 'radial-gradient(ellipse at bottom, #11101d 0%, #060608 100%)', overflow: 'hidden', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', minHeight: '90vh', background: 'radial-gradient(ellipse at bottom, #11101d 0%, #060608 100%)', overflow: 'hidden', flexWrap: 'wrap', position: 'relative' }}>
+      {/* Back to Home Link */}
+      <Link 
+        href="/" 
+        style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s' }}
+        onMouseOver={(e) => { e.currentTarget.style.color = '#fff'; }}
+        onMouseOut={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
+      >
+        <span>←</span> Back to Home
+      </Link>
+
       {/* Left Side: Premium Feature/Value Prop Illustration */}
       <div className="login-left-panel" style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 60px', borderRight: '1px solid rgba(255, 255, 255, 0.03)', position: 'relative', background: 'radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 40%)', minWidth: '320px' }}>
         
