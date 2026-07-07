@@ -37,8 +37,8 @@ async function fetchYouTubeTranscript(videoId: string): Promise<string> {
       body: JSON.stringify({
         context: {
           client: {
-            clientName: 'WEB',
-            clientVersion: '2.20240701.00.00',
+            clientName: 'ANDROID',
+            clientVersion: '17.31.35',
             hl: 'en',
             gl: 'US',
           },
