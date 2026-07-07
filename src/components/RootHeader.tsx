@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 export default function RootHeader({ userEmail }: { userEmail: string | undefined }) {
   const pathname = usePathname();
   
-  // Hide the basic root header on the dashboard and pricing pages, 
-  // because they have their own sticky DashboardNavbar!
-  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/pricing')) {
+  // Hide the basic root header on the dashboard, pricing, and login pages, 
+  // because they have their own sticky DashboardNavbar or don't need a redundant Login button!
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/pricing') || pathname === '/login') {
     return null;
   }
 
