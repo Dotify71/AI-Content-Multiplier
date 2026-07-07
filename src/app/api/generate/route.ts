@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+// @ts-ignore
+import { extract } from 'extract-youtube';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
 
@@ -18,64 +20,16 @@ function extractVideoId(url: string): string | null {
 }
 
 async function fetchYouTubeTranscript(videoId: string): Promise<string> {
-  const INNERTUBE_API_KEY = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8';
-  const headers = {
-    'Content-Type': 'application/json',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Origin': 'https://www.youtube.com',
-    'X-YouTube-Client-Name': '1',
-    'X-YouTube-Client-Version': '2.20240701.00.00',
-  };
-
-  // Use YouTube InnerTube API (used by YouTube's own web client)
-  const playerRes = await fetch(
-    `https://www.youtube.com/youtubei/v1/player?key=${INNERTUBE_API_KEY}`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        context: {
-          client: {
-            clientName: 'ANDROID',
-            clientVersion: '17.31.35',
-            hl: 'en',
-            gl: 'US',
-          },
-        },
-        videoId,
-      }),
+  try {
+    const transcript = await extract(videoId);
+    if (!transcript || transcript.length < 50) {
+      throw new Error('Transcript is empty or too short');
     }
-  );
-
-  if (!playerRes.ok) throw new Error(`InnerTube API returned ${playerRes.status}`);
-  const playerData = await playerRes.json();
-
-  const captionTracks = playerData?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
-  if (!captionTracks || captionTracks.length === 0) {
+    return transcript;
+  } catch (error) {
+    console.error('extract-youtube error:', error);
     throw new Error('No captions available for this video');
   }
-
-  // Prefer English, fallback to first available
-  const track = captionTracks.find((t: any) => t.languageCode === 'en')
-    || captionTracks.find((t: any) => t.languageCode?.startsWith('en'))
-    || captionTracks[0];
-
-  const captionUrl = `${track.baseUrl}&fmt=json3`;
-  const captionRes = await fetch(captionUrl, { headers: { 'User-Agent': headers['User-Agent'] } });
-  if (!captionRes.ok) throw new Error(`Caption fetch returned ${captionRes.status}`);
-
-  const captionData = await captionRes.json();
-  const text = captionData.events
-    ?.filter((e: any) => e.segs)
-    .flatMap((e: any) => e.segs.map((s: any) => s.utf8 || ''))
-    .join(' ')
-    .replace(/\n/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  if (!text || text.length < 50) throw new Error('Transcript is empty or too short');
-  return text;
 }
 
 export async function POST(req: Request) {
