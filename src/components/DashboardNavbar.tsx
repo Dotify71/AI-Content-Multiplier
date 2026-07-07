@@ -112,11 +112,15 @@ export default function DashboardNavbar() {
           </div>
         )}
 
-        {tier !== 'unlimited' && tier !== 'pro' && (
+        {tier === 'free' || tier === 'basic' ? (
           <Link href="/pricing" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>
             Upgrade
           </Link>
-        )}
+        ) : tier === 'pro' ? (
+          <Link href="/pricing" style={{ padding: '8px 18px', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none', fontWeight: 700, borderRadius: '24px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: '#fff', boxShadow: '0 0 16px rgba(245, 158, 11, 0.35)', transition: 'all 0.2s' }}>
+            ⚡ Go Unlimited
+          </Link>
+        ) : null}
         <button onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.9rem', transition: 'color 0.2s', padding: '8px' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
           Log out
         </button>
