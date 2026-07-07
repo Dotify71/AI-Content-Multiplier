@@ -62,32 +62,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '90vh', background: 'radial-gradient(ellipse at bottom, #11101d 0%, #060608 100%)', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', minHeight: '90vh', background: 'radial-gradient(ellipse at bottom, #11101d 0%, #060608 100%)', overflow: 'hidden', flexWrap: 'wrap' }}>
       {/* Left Side: Premium Feature/Value Prop Illustration */}
-      <div className="login-left-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px', borderRight: '1px solid rgba(255, 255, 255, 0.03)', position: 'relative', background: 'radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 40%)' }}>
+      <div className="login-left-panel" style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '40px 60px', borderRight: '1px solid rgba(255, 255, 255, 0.03)', position: 'relative', background: 'radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 40%)', minWidth: '320px' }}>
         
         {/* Abstract glowing background blobs */}
         <div style={{ position: 'absolute', width: '300px', height: '300px', borderRadius: '50%', background: 'var(--accent-glow)', filter: 'blur(100px)', opacity: 0.15, top: '25%', left: '20%', pointerEvents: 'none' }}></div>
         
         <div style={{ maxWidth: '540px', margin: '0 auto', width: '100%', position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '6px 12px', borderRadius: '20px', marginBottom: '32px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)', padding: '6px 12px', borderRadius: '20px', marginBottom: '24px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#a78bfa' }}></span>
             <span style={{ fontSize: '0.8rem', color: '#c084fc', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>AI-Powered Ghostwriter</span>
           </div>
 
-          <h2 style={{ fontSize: '2.8rem', fontWeight: 700, lineHeight: 1.15, marginBottom: '24px', letterSpacing: '-0.02em', color: '#fff' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 700, lineHeight: 1.25, marginBottom: '20px', letterSpacing: '-0.02em', color: '#fff' }}>
             Multiply your content in <span style={{ background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>your own voice.</span>
           </h2>
 
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '32px' }}>
-            Watch this quick 1-minute tutorial to see how easy it is to clone your voice and generate complete content packs from a single YouTube URL.
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '28px' }}>
+            Watch this quick demonstration to see how easy it is to clone your writing style and generate ready-to-post content packs from any YouTube URL.
           </p>
 
           {/* Premium Video Container */}
           <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0, 0, 0, 0.4)', overflow: 'hidden', boxShadow: '0 12px 30px rgba(0,0,0,0.5)' }}>
             <iframe 
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ" /* Replace with your actual product walkthrough video ID */
+              src="https://www.youtube.com/embed/L13qD2L9tW8" /* Real AI video rep showing dynamic screen walk */
               title="ContentMultiplier App Tutorial"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen
@@ -97,7 +97,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side: Clean Centered Google Login Box */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', background: '#0a090e' }}>
+      <div style={{ flex: '1 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', background: '#0a090e', minWidth: '320px' }}>
         <div style={{ width: '100%', maxWidth: '400px' }}>
           
           <div className="glass-panel animate-glow" style={{ padding: '50px 40px', borderRadius: '20px', border: '1px solid rgba(255, 255, 255, 0.08)', background: 'rgba(255, 255, 255, 0.02)', backdropFilter: 'blur(20px)', textAlign: 'center', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' }}>
