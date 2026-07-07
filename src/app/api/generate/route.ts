@@ -1,18 +1,15 @@
 import { NextResponse } from 'next/server';
+export const runtime = 'edge';
 import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
 
-// --- Custom YouTube Transcript Fetcher ---
 function extractVideoId(url: string): string | null {
   try {
-    // Handle youtu.be/ID format
     const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
     if (shortMatch) return shortMatch[1];
-    // Handle youtube.com/watch?v=ID format
     const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
     if (longMatch) return longMatch[1];
-    // Handle bare 11-char ID
     if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
   } catch { }
   return null;
@@ -49,30 +46,29 @@ export async function POST(req: Request) {
     // Check usage limits
     const { data: profile } = await supabase.from('profiles').select('tier').eq('id', user.id).single();
     const tier = profile?.tier || 'free';
-    
-    // Quick MVP rate limiting based on tier
+
     let query = supabase.from('content_packs').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
     let limit = 3;
     const now = new Date();
-    
+
     if (tier === 'basic') {
-        limit = 5; // 5 per week
-        const dayOfWeek = now.getUTCDay();
-        const diffToMonday = now.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-        const startOfWeekUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), diffToMonday)).toISOString();
-        query = query.gte('created_at', startOfWeekUTC);
+      limit = 5;
+      const dayOfWeek = now.getUTCDay();
+      const diffToMonday = now.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+      const startOfWeekUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), diffToMonday)).toISOString();
+      query = query.gte('created_at', startOfWeekUTC);
     } else if (tier === 'pro') {
-        limit = 10; // 10 per day
-        const startOfDayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
-        query = query.gte('created_at', startOfDayUTC);
+      limit = 10;
+      const startOfDayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
+      query = query.gte('created_at', startOfDayUTC);
     } else if (tier === 'unlimited') {
-        limit = Infinity;
+      limit = Infinity;
     }
-    
+
     const { count } = await query;
-    
+
     if (count !== null && count >= limit) {
-        return NextResponse.json({ error: `You have reached your limit for the ${tier} tier. Please upgrade to generate more.` }, { status: 403 });
+      return NextResponse.json({ error: `You have reached your limit for the ${tier} tier. Please upgrade to generate more.` }, { status: 403 });
     }
 
     if (!process.env.GEMINI_API_KEY) {
@@ -110,16 +106,17 @@ ${fullTranscript}
 
     if (voiceSample && voiceSample.trim().length > 0) {
       prompt += `
-I am also providing you with a sample of my own writing. You MUST analyze this writing sample to understand my tone, vocabulary, formatting style, and pacing. You MUST write the Content Pack strictly mimicking this exact voice.
+
+I am also providing a sample of my own writing. You MUST analyze it to understand my tone, vocabulary, formatting style, and pacing. Write the Content Pack strictly mimicking this exact voice.
 
 ---
 MY WRITING SAMPLE (Voice Clone):
 ${voiceSample}
----
-`;
+---`;
     }
 
     prompt += `
+
 Please output a JSON object with exactly the following structure (do NOT wrap it in markdown code blocks, just raw JSON):
 {
   "blogPost": "A well-structured, SEO-friendly blog post with a catchy title, H2s, H3s, and short paragraphs.",
@@ -129,31 +126,29 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
     "Tweet 2...",
     "Tweet 3..."
   ]
-}
-`;
+}`;
 
     // 4. Generate Content
     const result = await model.generateContent(prompt);
     const resultText = result.response.text();
     let contentPack;
     try {
-       // Find the first { and last } to extract JSON
-       const jsonStart = resultText.indexOf('{');
-       const jsonEnd = resultText.lastIndexOf('}');
-       const cleanJson = resultText.substring(jsonStart, jsonEnd + 1);
-       contentPack = JSON.parse(cleanJson);
+      const jsonStart = resultText.indexOf('{');
+      const jsonEnd = resultText.lastIndexOf('}');
+      const cleanJson = resultText.substring(jsonStart, jsonEnd + 1);
+      contentPack = JSON.parse(cleanJson);
     } catch (e) {
-       console.error("Failed to parse JSON:", resultText);
-       return NextResponse.json({ error: 'AI returned invalid format.' }, { status: 500 });
+      console.error('Failed to parse JSON:', resultText);
+      return NextResponse.json({ error: 'AI returned invalid format.' }, { status: 500 });
     }
 
-    // Save the generation to the database
+    // Save to database
     await supabase.from('content_packs').insert({
-        user_id: user.id,
-        youtube_url: url,
-        blog_post: contentPack.blogPost,
-        linkedin_post: contentPack.linkedinPost,
-        tweets: contentPack.tweets
+      user_id: user.id,
+      youtube_url: url,
+      blog_post: contentPack.blogPost,
+      linkedin_post: contentPack.linkedinPost,
+      tweets: contentPack.tweets,
     });
 
     return NextResponse.json(contentPack);
