@@ -62,20 +62,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '100px', paddingBottom: '100px', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: '100%', maxWidth: '400px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-           <h1 style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>
-             ContentMultiplier
-           </h1>
-           <p style={{ color: 'var(--text-secondary)' }}>Welcome back. Log in to continue.</p>
-        </div>
+    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '100px', paddingBottom: '100px', minHeight: '85vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
+        
+        <div className="glass-panel" style={{ padding: '50px 40px', borderRadius: '16px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
+          {/* Logo & Branding inside the card for better balance */}
+          <div style={{ marginBottom: '32px' }}>
+             <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>
+               ContentMultiplier
+             </h1>
+             <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Welcome back. Log in to your creator portal.</p>
+          </div>
 
-        <div className="glass-panel" style={{ padding: '40px' }}>
           <button 
             onClick={handleGoogleLogin}
             disabled={loading}
-            style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px' }}
+            style={{ width: '100%', padding: '16px', borderRadius: '24px', border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '1rem', fontWeight: '500', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', transition: 'background-color 0.2s', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+            onMouseOver={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)'; }}
           >
             <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -91,7 +95,16 @@ export default function LoginPage() {
               Error: {authError}
             </div>
           )}
+
+          <div style={{ marginTop: '32px', borderTop: '1px solid rgba(255, 255, 255, 0.05)', paddingTop: '20px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+              Secure Authentication
+            </p>
+          </div>
         </div>
+      </div>
+    </div>
+  );
         
       </div>
     </div>
