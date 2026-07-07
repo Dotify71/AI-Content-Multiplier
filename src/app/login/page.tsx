@@ -79,35 +79,19 @@ export default function LoginPage() {
             Multiply your content in <span style={{ background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>your own voice.</span>
           </h2>
 
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '48px' }}>
-            Turn any YouTube link into high-converting Twitter threads, professional LinkedIn posts, and complete SEO-optimized blog posts using custom voice training.
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '32px' }}>
+            Watch this quick 1-minute tutorial to see how easy it is to clone your voice and generate complete content packs from a single YouTube URL.
           </p>
 
-          {/* Premium visual value loop */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: '30px', borderRadius: '16px', backdropFilter: 'blur(8px)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', fontWeight: 'bold' }}>YT</div>
-              <div>
-                <h4 style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>1. Paste YouTube Video Link</h4>
-                <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>We extract the transcript instantly.</p>
-              </div>
-            </div>
-            <div style={{ height: '24px', width: '2px', background: 'linear-gradient(to bottom, #ef4444, #8b5cf6)', marginLeft: '19px' }}></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(139, 92, 246, 0.15)', color: '#a78bfa', fontWeight: 'bold' }}>AI</div>
-              <div>
-                <h4 style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>2. Train Your Ghostwriter</h4>
-                <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>AI clones your unique vocabulary, tone, and pacing.</p>
-              </div>
-            </div>
-            <div style={{ height: '24px', width: '2px', background: 'linear-gradient(to bottom, #8b5cf6, #3b82f6)', marginLeft: '19px' }}></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', fontWeight: 'bold' }}>✨</div>
-              <div>
-                <h4 style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>3. Generate Multi-Channel Pack</h4>
-                <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Get professional tweets, LinkedIn posts, and blogs in seconds.</p>
-              </div>
-            </div>
+          {/* Premium Video Container */}
+          <div style={{ position: 'relative', width: '100%', paddingBottom: '56.25%', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', background: 'rgba(0, 0, 0, 0.4)', overflow: 'hidden', boxShadow: '0 12px 30px rgba(0,0,0,0.5)' }}>
+            <iframe 
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ" /* Replace with your actual product walkthrough video ID */
+              title="ContentMultiplier App Tutorial"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+            />
           </div>
         </div>
       </div>
