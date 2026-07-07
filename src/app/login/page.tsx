@@ -285,41 +285,6 @@ export default function LoginPage() {
               {loading ? 'Redirecting...' : 'Continue with Google'}
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '24px 0' }}>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>or</span>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.08)' }}></div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <input 
-                id="email-input"
-                type="email" 
-                placeholder="Email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: '#fff', outline: 'none' }}
-              />
-              <input 
-                id="password-input"
-                type="password" 
-                placeholder="Password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)', color: '#fff', outline: 'none' }}
-              />
-              <button 
-                id="password-login-btn"
-                onClick={handlePasswordLogin}
-                disabled={emailLoading}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#8b5cf6', color: '#fff', fontWeight: 'bold', cursor: 'pointer', border: 'none', transition: 'background-color 0.2s' }}
-                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#7c3aed'; }}
-                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#8b5cf6'; }}
-              >
-                {emailLoading ? 'Logging in...' : 'Sign In / Sign Up'}
-              </button>
-            </div>
-
             {authError && (
               <div style={{ color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '12px', borderRadius: '8px', marginTop: '24px', fontSize: '0.9rem', textAlign: 'center' }}>
                 Error: {authError}
