@@ -182,11 +182,20 @@ export default function LoginPage() {
     try {
       setLoading(true);
       setAuthError("");
+
+      // Sign out any stale existing session first to prevent old account persisting
+      await supabase.auth.signOut();
       
+      // Always use the production domain for the callback to avoid preview URL issues
+      const isProd = window.location.hostname === 'ai-content-multiplier.vercel.app';
+      const callbackUrl = isProd
+        ? 'https://ai-content-multiplier.vercel.app/auth/callback'
+        : `${window.location.origin}/auth/callback`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callbackUrl,
         },
       });
 
