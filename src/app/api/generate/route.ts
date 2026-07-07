@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-// @ts-ignore
-import { extract } from 'extract-youtube';
+import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
 
@@ -21,13 +20,13 @@ function extractVideoId(url: string): string | null {
 
 async function fetchYouTubeTranscript(videoId: string): Promise<string> {
   try {
-    const transcript = await extract(videoId);
-    if (!transcript || transcript.length < 50) {
-      throw new Error('Transcript is empty or too short');
+    const transcript = await YoutubeTranscript.fetchTranscript(videoId);
+    if (!transcript || transcript.length === 0) {
+      throw new Error('Transcript is empty');
     }
-    return transcript;
+    return transcript.map(t => t.text).join(' ').replace(/\n/g, ' ');
   } catch (error) {
-    console.error('extract-youtube error:', error);
+    console.error('youtube-transcript error:', error);
     throw new Error('No captions available for this video');
   }
 }
