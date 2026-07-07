@@ -258,13 +258,13 @@ export default function LoginPage() {
       <div style={{ flex: '1 1 400px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px', background: '#0a090e', minWidth: '320px' }}>
         <div style={{ width: '100%', maxWidth: '400px' }}>
           
-          <div className="glass-panel animate-glow" style={{ padding: '50px 40px', borderRadius: '20px', border: '1px solid rgba(255, 255, 255, 0.08)', background: 'rgba(255, 255, 255, 0.02)', backdropFilter: 'blur(20px)', textAlign: 'center', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' }}>
+          <div className="glass-panel animate-glow" style={{ padding: '32px 30px', borderRadius: '20px', border: '1px solid rgba(255, 255, 255, 0.08)', background: 'rgba(255, 255, 255, 0.02)', backdropFilter: 'blur(20px)', textAlign: 'center', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' }}>
             
-            <div style={{ marginBottom: '32px' }}>
-               <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.04em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>
+            <div style={{ marginBottom: '24px' }}>
+               <h1 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.04em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '6px' }}>
                  ContentMultiplier
                </h1>
-               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.5 }}>
+               <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.4 }}>
                  Log in to access your creator dashboard.
                </p>
             </div>
