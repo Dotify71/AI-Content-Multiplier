@@ -22,7 +22,7 @@ export default function Home() {
         
         <div className="fade-in-up delay-3" style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
           <Link href="/dashboard" className="btn-primary" style={{ fontSize: '1.1rem', padding: '16px 32px', display: 'inline-block' }}>Start Generating Free</Link>
-          <button className="btn-secondary">See Examples</button>
+          <Link href="/login" className="btn-secondary" style={{ fontSize: '1.1rem', padding: '16px 32px', display: 'inline-block', textDecoration: 'none' }}>See Examples</Link>
         </div>
       </section>
 
