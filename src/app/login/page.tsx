@@ -183,13 +183,22 @@ export default function LoginPage() {
       setLoading(true);
       setAuthError("");
 
-      // Sign out any stale existing session first to prevent old account persisting
+      // Ensure absolutely no old PKCE cookies are stuck
+      document.cookie.split(";").forEach((c) => {
+        if (c.trim().startsWith("sb-")) {
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        }
+      });
+
       await fetch('/api/auth/logout', { method: 'POST' });
       await supabase.auth.signOut();
       
+      const callbackUrl = `${window.location.origin}`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
+          redirectTo: callbackUrl,
           queryParams: {
             prompt: 'select_account'
           }
