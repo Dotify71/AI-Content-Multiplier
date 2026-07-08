@@ -187,16 +187,9 @@ export default function LoginPage() {
       await fetch('/api/auth/logout', { method: 'POST' });
       await supabase.auth.signOut();
       
-      // Always use the production domain for the callback to avoid preview URL issues
-      const isProd = window.location.hostname === 'ai-content-multiplier.vercel.app';
-      const callbackUrl = isProd
-        ? 'https://ai-content-multiplier.vercel.app/auth/callback'
-        : `${window.location.origin}/auth/callback`;
-
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: callbackUrl,
           queryParams: {
             prompt: 'select_account'
           }
