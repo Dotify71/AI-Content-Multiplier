@@ -10,8 +10,22 @@ import { createClient } from '@/utils/supabase/server';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Content Multiplier AI",
-  description: "Turn any YouTube video into an All-in-One Content Pack in your own voice.",
+  metadataBase: new URL('https://ai-content-multiplier.vercel.app'),
+  title: "Content Multiplier AI | 10x Your Content Output",
+  description: "Turn any YouTube video into an All-in-One Content Pack in your own voice. Instantly generate Blogs, LinkedIn posts, and Tweets.",
+  openGraph: {
+    title: "Content Multiplier AI",
+    description: "Turn any YouTube video into an All-in-One Content Pack in your own voice.",
+    url: 'https://ai-content-multiplier.vercel.app',
+    siteName: 'Content Multiplier',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Content Multiplier AI',
+    description: 'Turn any YouTube video into an All-in-One Content Pack in your own voice.',
+  },
 };
 
 export default async function RootLayout({
