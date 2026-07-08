@@ -1,8 +1,13 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
+import OAuthRedirect from '@/components/OAuthRedirect';
 
 export default function Home() {
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
+      <Suspense fallback={null}>
+        <OAuthRedirect />
+      </Suspense>
       {/* Background Glow Effect */}
       <div className="hero-glow"></div>
       
