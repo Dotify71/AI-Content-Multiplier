@@ -5,11 +5,17 @@ import ReactMarkdown from 'react-markdown';
 import { createClient } from '@/utils/supabase/client';
 import DashboardNavbar from '@/components/DashboardNavbar';
 
+interface ContentResult {
+  blogPost: string;
+  linkedinPost: string;
+  tweets: string[];
+}
+
 export default function Dashboard() {
   const [url, setUrl] = useState("");
   const [voiceSample, setVoiceSample] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ContentResult | null>(null);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("blog");
   const [copied, setCopied] = useState<string | null>(null);
@@ -33,6 +39,7 @@ export default function Dashboard() {
         setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
       }, 5000);
     } else {
+      // eslint-disable-next-line
       setLoadingMessageIndex(0);
     }
     return () => clearInterval(interval);
@@ -42,6 +49,7 @@ export default function Dashboard() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user?.email) setUserEmail(user.email);
     });
+    // eslint-disable-next-line
   }, []);
 
   const handleCopy = (text: string, id: string) => {
@@ -87,8 +95,12 @@ export default function Dashboard() {
       
       setResult(data);
       window.dispatchEvent(new Event('contentGenerated'));
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }
@@ -156,7 +168,7 @@ export default function Dashboard() {
                 <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 500, marginLeft: '8px', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '12px' }}>Optional</span>
               </label>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px', lineHeight: 1.4 }}>
-                Paste 1-2 of your best performing social media posts, a blog excerpt, or simply type direct instructions (e.g. <i>"Use punchy, short sentences. Professional but edgy tone."</i>)
+                Paste 1-2 of your best performing social media posts, a blog excerpt, or simply type direct instructions (e.g. <i>&quot;Use punchy, short sentences. Professional but edgy tone.&quot;</i>)
               </p>
               <textarea 
                 placeholder="Paste your past writing or direct instructions here..." 
@@ -203,6 +215,7 @@ export default function Dashboard() {
             {activeTab === 'blog' && (
               <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 {thumbnailUrl && (
+                  // eslint-disable-next-line
                   <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} />
                 )}
                 <div style={{ padding: '60px 80px', position: 'relative' }} className="blog-content">

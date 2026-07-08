@@ -92,8 +92,12 @@ export async function POST(req: Request) {
     let fullTranscript = '';
     try {
       fullTranscript = await fetchYouTubeTranscript(videoId);
-    } catch (e: any) {
-      console.error('Transcript error:', e?.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error('Transcript error:', e.message);
+      } else {
+        console.error('Transcript error:', e);
+      }
       return NextResponse.json({ error: 'Failed to extract transcript. Please ensure the video has English closed captions enabled.' }, { status: 400 });
     }
 
@@ -145,7 +149,7 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
       const jsonEnd = resultText.lastIndexOf('}');
       const cleanJson = resultText.substring(jsonStart, jsonEnd + 1);
       contentPack = JSON.parse(cleanJson);
-    } catch (e) {
+    } catch {
       console.error('Failed to parse JSON:', resultText);
       return NextResponse.json({ error: 'AI returned invalid format.' }, { status: 500 });
     }
@@ -161,8 +165,11 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
 
     return NextResponse.json(contentPack);
 
-  } catch (error: any) {
-    console.error('Error generating content:', error);
-    return NextResponse.json({ error: error.message || 'An unexpected error occurred' }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error generating content:', error);
+      return NextResponse.json({ error: error.message || 'An unexpected error occurred' }, { status: 500 });
+    }
+    return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });
   }
 }

@@ -2,13 +2,11 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [currentTier, setCurrentTier] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchTier = async () => {
@@ -47,7 +45,7 @@ export default function PricingPage() {
           name: "ContentMultiplier",
           description: `Upgrade to ${tier.toUpperCase()} tier`,
           order_id: order.id,
-          handler: async function (response: any) {
+          handler: async function (response: Record<string, string>) {
             try {
               const verifyRes = await fetch('/api/verify-payment', {
                 method: 'POST',
@@ -63,7 +61,7 @@ export default function PricingPage() {
               let verifyData;
               try {
                 verifyData = await verifyRes.json();
-              } catch (e) {
+              } catch {
                 throw new Error("The server crashed while verifying the payment. Check your terminal for errors.");
               }
 
@@ -73,21 +71,30 @@ export default function PricingPage() {
               } else {
                 alert("Payment verification failed: " + verifyData.error);
               }
-            } catch (err: any) {
-              alert(err.message);
+            } catch (err: unknown) {
+              if (err instanceof Error) {
+                alert(err.message);
+              } else {
+                alert("An unknown error occurred.");
+              }
             }
           },
           theme: { color: "#8b5cf6" }
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (response: any){
+        rzp.on('payment.failed', function (response: { error: { description: string } }){
           alert("Payment failed: " + response.error.description);
         });
         rzp.open();
       };
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("An unknown error occurred.");
+      }
     } finally {
       setLoading(null);
     }

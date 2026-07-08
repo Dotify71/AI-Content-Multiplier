@@ -6,10 +6,19 @@ import { createClient } from '@/utils/supabase/client';
 import DashboardNavbar from '@/components/DashboardNavbar';
 import Link from 'next/link';
 
+interface ContentPack {
+  id: number;
+  created_at: string;
+  youtube_url: string;
+  blog_post: string;
+  linkedin_post: string;
+  tweets: string[];
+}
+
 export default function HistoryPage() {
-  const [packs, setPacks] = useState<any[]>([]);
+  const [packs, setPacks] = useState<ContentPack[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPack, setSelectedPack] = useState<any>(null);
+  const [selectedPack, setSelectedPack] = useState<ContentPack | null>(null);
   const [activeTab, setActiveTab] = useState("blog");
   const [copied, setCopied] = useState<string | null>(null);
   const supabase = createClient();
@@ -67,6 +76,7 @@ export default function HistoryPage() {
               {activeTab === 'blog' && (
                 <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   {getYoutubeVideoId(selectedPack.youtube_url) && (
+                    // eslint-disable-next-line
                     <img src={`https://img.youtube.com/vi/${getYoutubeVideoId(selectedPack.youtube_url)}/maxresdefault.jpg`} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} />
                   )}
                   <div style={{ padding: '60px 80px', position: 'relative' }} className="blog-content">
@@ -156,7 +166,7 @@ export default function HistoryPage() {
               <div style={{ textAlign: 'center', padding: '80px 20px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px dashed rgba(255,255,255,0.1)' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📂</div>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '8px' }}>No History Yet</h3>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>You haven't generated any content packs yet.</p>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>You haven&apos;t generated any content packs yet.</p>
                 <Link href="/dashboard" className="btn-primary" style={{ padding: '12px 24px', display: 'inline-block', textDecoration: 'none' }}>
                   Generate Your First Pack
                 </Link>

@@ -69,7 +69,7 @@ Agree? Let's discuss in the comments. 👇
         <div style={{ marginBottom: '24px' }}>
           <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '6px', fontWeight: 500 }}>Your Writing Sample (For Voice Cloning)</label>
           <div style={{ padding: '12px', background: 'rgba(0, 0, 0, 0.2)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '8px', color: '#888', fontSize: '0.85rem', minHeight: '60px', fontStyle: 'italic', lineHeight: 1.4 }}>
-            "Syntax is commodity. The elite devs of tomorrow aren't the ones memorizing code blocks, but the architects orchestrating systems."
+            &quot;Syntax is commodity. The elite devs of tomorrow aren&apos;t the ones memorizing code blocks, but the architects orchestrating systems.&quot;
           </div>
         </div>
 
@@ -173,9 +173,6 @@ Agree? Let's discuss in the comments. 👇
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailLoading, setEmailLoading] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -183,6 +180,7 @@ export default function LoginPage() {
     const params = new URLSearchParams(window.location.search);
     const error = params.get('error');
     if (error) {
+      // eslint-disable-next-line
       setAuthError(decodeURIComponent(error));
     }
 
@@ -225,38 +223,16 @@ export default function LoginPage() {
         setAuthError(error.message);
         setLoading(false);
       }
-    } catch (err: any) {
-      setAuthError(err.message || "A critical error occurred while trying to connect to Supabase.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setAuthError(err.message || "A critical error occurred while trying to connect to Supabase.");
+      } else {
+        setAuthError("A critical error occurred while trying to connect to Supabase.");
+      }
       setLoading(false);
     }
   };
 
-  const handlePasswordLogin = async () => {
-    if (!email || !password) return;
-    try {
-      setEmailLoading(true);
-      setAuthError("");
-      
-      // Try to sign in
-      let { error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      // If the user doesn't exist, sign them up instead!
-      if (error && error.message.includes("Invalid login credentials")) {
-         const { error: signUpError } = await supabase.auth.signUp({ email, password });
-         error = signUpError;
-      }
-
-      if (error) {
-        setAuthError(error.message);
-      } else {
-        window.location.href = '/dashboard';
-      }
-    } catch (err: any) {
-      setAuthError(err.message || "A critical error occurred");
-    } finally {
-      setEmailLoading(false);
-    }
-  };
 
   return (
     <div style={{ display: 'flex', minHeight: '90vh', background: 'radial-gradient(ellipse at bottom, #11101d 0%, #060608 100%)', overflow: 'hidden', flexWrap: 'wrap', position: 'relative' }}>

@@ -8,7 +8,7 @@ export default function TermsPage() {
         <div style={{ lineHeight: 1.8, color: '#e5e7eb' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>1. Acceptance of Terms</h2>
           <p style={{ marginBottom: '24px' }}>
-            By accessing and using ContentMultiplier ("the Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you may not access the Service.
+            By accessing and using ContentMultiplier (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you may not access the Service.
           </p>
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginTop: '32px', marginBottom: '16px' }}>2. Description of Service</h2>

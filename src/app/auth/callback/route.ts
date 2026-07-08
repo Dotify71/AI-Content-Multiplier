@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/utils/supabase/server'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
@@ -11,7 +10,7 @@ export async function GET(request: Request) {
     const { createServerClient } = await import('@supabase/ssr');
     
     const cookieStore = await cookies()
-    let response = NextResponse.redirect(`${origin}${next}`)
+    const response = NextResponse.redirect(`${origin}${next}`)
     
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
