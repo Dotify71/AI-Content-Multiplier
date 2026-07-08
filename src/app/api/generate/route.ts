@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 export const runtime = 'edge';
-import { YoutubeTranscript } from 'youtube-transcript';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
 
@@ -17,13 +16,23 @@ function extractVideoId(url: string): string | null {
 
 async function fetchYouTubeTranscript(videoId: string): Promise<string> {
   try {
-    const transcript = await YoutubeTranscript.fetchTranscript(videoId);
-    if (!transcript || transcript.length === 0) {
+    const res = await fetch(`https://youtube-transcript.ai/transcript/${videoId}.txt`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch transcript: ${res.statusText}`);
+    }
+    const text = await res.text();
+    if (!text || text.trim() === '') {
       throw new Error('Transcript is empty');
     }
-    return transcript.map(t => t.text).join(' ').replace(/\n/g, ' ');
+    // Extract everything after "## Transcript" if present, otherwise just return the text
+    const parts = text.split('## Transcript');
+    let transcriptData = parts.length > 1 ? parts[1].trim() : text.trim();
+    // Remove the timestamps like [0:01] to save tokens and clean it up (optional but good)
+    transcriptData = transcriptData.replace(/\[\d+:\d+\]/g, '').replace(/\s+/g, ' ').trim();
+    
+    return transcriptData;
   } catch (error) {
-    console.error('youtube-transcript error:', error);
+    console.error('youtube-transcript API error:', error);
     throw new Error('No captions available for this video');
   }
 }
