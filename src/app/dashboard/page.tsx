@@ -151,18 +151,23 @@ export default function Dashboard() {
             </div>
 
             <div style={{ marginBottom: '32px' }}>
-              <label style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>
+              <label style={{ display: 'flex', alignItems: 'baseline', fontWeight: 600, marginBottom: '4px' }}>
                 Your Voice Clone Sample 
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 400, marginLeft: '8px' }}>(Optional)</span>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 500, marginLeft: '8px', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '12px' }}>Optional</span>
               </label>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px', lineHeight: 1.4 }}>
+                Paste 1-2 of your best performing social media posts, a blog excerpt, or simply type direct instructions (e.g. <i>"Use punchy, short sentences. Professional but edgy tone."</i>)
+              </p>
               <textarea 
-                placeholder="Paste a recent blog post or long social media post you wrote here..." 
+                placeholder="Paste your past writing or direct instructions here..." 
                 rows={6}
                 value={voiceSample}
                 onChange={(e) => setVoiceSample(e.target.value)}
                 style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none', resize: 'vertical' }}
-              ></textarea>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '8px' }}>We use this to analyze your tone, pacing, and vocabulary.</p>
+              />
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '8px' }}>
+                We use this to analyze your exact tone, pacing, vocabulary, and sentence structure.
+              </p>
             </div>
 
             <button 
