@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function InteractiveSimulator() {
   const [step, setStep] = useState('idle'); // 'idle' | 'loading' | 'completed'
