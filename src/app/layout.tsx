@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     title: 'Content Multiplier AI',
     description: 'Turn any YouTube video into an All-in-One Content Pack in your own voice.',
   },
+  verification: {
+    google: 'h825GIngQeB8AvyGjTkUrueZ1W2y008wNAfDx475RWU',
+  },
 };
 
 export default async function RootLayout({
