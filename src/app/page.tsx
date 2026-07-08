@@ -1,20 +1,6 @@
 import Link from 'next/link';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
 
-export default async function Home({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const code = searchParams.code;
-  if (typeof code === 'string') {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      redirect('/dashboard');
-    } else {
-      console.error("Root exchange error:", error);
-      redirect(`/login?error=${encodeURIComponent(error.message)}`);
-    }
-  }
-
+export default function Home() {
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
       {/* Background Glow Effect */}

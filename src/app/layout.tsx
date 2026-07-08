@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { Suspense } from "react";
 import "./globals.css";
 import Footer from "../components/Footer";
 import RootHeader from "../components/RootHeader";
+import OAuthRedirect from "../components/OAuthRedirect";
 import { createClient } from '@/utils/supabase/server';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,6 +25,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Suspense fallback={null}>
+          <OAuthRedirect />
+        </Suspense>
         <RootHeader userEmail={user?.email} />
         <main style={{ flex: 1 }}>
           {children}

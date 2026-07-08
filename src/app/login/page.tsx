@@ -193,7 +193,7 @@ export default function LoginPage() {
       await fetch('/api/auth/logout', { method: 'POST' });
       await supabase.auth.signOut();
       
-      const callbackUrl = `${window.location.origin}`;
+      const callbackUrl = `${window.location.origin}/auth/callback`;
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
