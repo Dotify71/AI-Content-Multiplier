@@ -14,7 +14,29 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("blog");
   const [copied, setCopied] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState("");
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
   const supabase = createClient();
+
+  const loadingMessages = [
+    "Analyzing Video & Cloning Voice...",
+    "Extracting key insights...",
+    "Writing your blog post...",
+    "Crafting a viral LinkedIn post...",
+    "Making something amazing for Twitter...",
+    "Polishing the final content pack..."
+  ];
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (loading) {
+      interval = setInterval(() => {
+        setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }, 5000);
+    } else {
+      setLoadingMessageIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [loading, loadingMessages.length]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -82,8 +104,10 @@ export default function Dashboard() {
         {loading ? (
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px' }}>Analyzing Video & Cloning Voice...</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>This usually takes about 20-30 seconds.</p>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px', transition: 'all 0.3s ease' }}>
+              {loadingMessages[loadingMessageIndex]}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)' }}>This usually takes about 20-60 seconds.</p>
           </div>
           
           <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
