@@ -7,21 +7,40 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/dashboard'
 
   if (code) {
-    const supabase = await createClient()
+    const { cookies } = await import('next/headers');
+    const { createServerClient } = await import('@supabase/ssr');
+    
+    const cookieStore = cookies()
+    let response = NextResponse.redirect(`${origin}${next}`)
+    
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) => {
+                cookieStore.set(name, value, options)
+              })
+            } catch {
+              // This fails in Next.js GET handlers, so we MUST apply them to the response object!
+            }
+            // CRITICAL: Apply cookies to the NextResponse object directly!
+            cookiesToSet.forEach(({ name, value, options }) => {
+              response.cookies.set({ name, value, ...options })
+            })
+          },
+        },
+      }
+    )
+
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      // On Vercel, the internal request origin can differ from the real frontend URL.
-      // x-forwarded-host contains the real host the user's browser is accessing.
-      const forwardedHost = request.headers.get('x-forwarded-host')
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
+      return response
     } else {
       console.error("Auth error:", error);
       return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)

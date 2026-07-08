@@ -178,6 +178,23 @@ export default function LoginPage() {
   const [emailLoading, setEmailLoading] = useState(false);
   const supabase = createClient();
 
+  useEffect(() => {
+    // Check for error in URL
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    if (error) {
+      setAuthError(decodeURIComponent(error));
+    }
+
+    // Force production URL for login to prevent PKCE cookie domain mismatches on Vercel preview URLs
+    if (typeof window !== 'undefined' && 
+        window.location.hostname !== 'localhost' && 
+        window.location.hostname !== 'ai-content-multiplier.vercel.app' &&
+        window.location.hostname.includes('vercel.app')) {
+      window.location.href = 'https://ai-content-multiplier.vercel.app/login';
+    }
+  }, []);
+
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
@@ -191,7 +208,6 @@ export default function LoginPage() {
       });
 
       await fetch('/api/auth/logout', { method: 'POST' });
-      await supabase.auth.signOut();
       
       const callbackUrl = `${window.location.origin}/auth/callback`;
 
