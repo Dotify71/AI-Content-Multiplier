@@ -58,8 +58,10 @@ export default function DashboardNavbar() {
   }, []);
 
   const handleLogout = async () => {
+    // Call server-side logout to clear HttpOnly cookies securely
+    await fetch('/api/auth/logout', { method: 'POST' });
     await supabase.auth.signOut();
-    router.push('/');
+    window.location.href = '/';
   };
 
   const limit = tier === 'unlimited' ? '∞' : tier === 'pro' ? 10 : tier === 'basic' ? 5 : 3;

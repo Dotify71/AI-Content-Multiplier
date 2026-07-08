@@ -184,6 +184,7 @@ export default function LoginPage() {
       setAuthError("");
 
       // Sign out any stale existing session first to prevent old account persisting
+      await fetch('/api/auth/logout', { method: 'POST' });
       await supabase.auth.signOut();
       
       // Always use the production domain for the callback to avoid preview URL issues
