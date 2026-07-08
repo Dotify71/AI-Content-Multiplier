@@ -17,7 +17,7 @@ export default function Home() {
         </h1>
         
         <p className="fade-in-up delay-2" style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
-          Paste a YouTube link. Upload a writing sample. Get a viral LinkedIn thread, 3 Tweets, and an SEO Blog Post—written exactly how you sound.
+          Paste a YouTube link. Upload a writing sample. Get a viral LinkedIn thread, 3 Tweets, an SEO Blog Post, and a TikTok script—written exactly how you sound.
         </p>
         
         <div className="fade-in-up delay-3" style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
@@ -49,7 +49,7 @@ export default function Home() {
           <div className="glass-panel" style={{ transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden' }}>
             <div style={{ fontSize: '5rem', fontWeight: 800, color: 'rgba(255,255,255,0.04)', position: 'absolute', top: '-15px', right: '10px', lineHeight: 1, userSelect: 'none' }}>03</div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '12px', color: 'var(--text-primary)', position: 'relative' }}>Content Generation</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, position: 'relative' }}>Within seconds, receive a multi-platform content suite: a long-form article, a structured thread, and highly engaging social posts.</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, position: 'relative' }}>Within seconds, receive a multi-platform content suite: a long-form article, a structured thread, highly engaging social posts, and short-form video scripts.</p>
           </div>
         </div>
       </section>

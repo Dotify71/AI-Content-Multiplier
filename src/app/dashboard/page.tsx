@@ -28,6 +28,7 @@ export default function Dashboard() {
     "Analyzing Video & Cloning Voice...",
     "Extracting key insights...",
     "Writing your blog post...",
+    "Scripting TikToks & Reels...",
     "Crafting a viral LinkedIn post...",
     "Making something amazing for Twitter...",
     "Polishing the final content pack..."
@@ -124,6 +125,7 @@ export default function Dashboard() {
           </div>
           
           <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
+            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
             <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
             <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
             <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>

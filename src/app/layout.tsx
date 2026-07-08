@@ -12,10 +12,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL('https://ai-content-multiplier.vercel.app'),
   title: "Content Multiplier AI | 10x Your Content Output",
-  description: "Turn any YouTube video into an All-in-One Content Pack in your own voice. Instantly generate Blogs, LinkedIn posts, and Tweets.",
+  description: "Turn any YouTube video into an All-in-One Content Pack in your own voice. Instantly generate Blogs, LinkedIn posts, Tweets, and TikTok/Reels Scripts.",
   openGraph: {
     title: "Content Multiplier AI",
-    description: "Turn any YouTube video into an All-in-One Content Pack in your own voice.",
+    description: "Turn any YouTube video into an All-in-One Content Pack. Generate Blogs, LinkedIn, Tweets, and TikTok Scripts in your voice.",
     url: 'https://ai-content-multiplier.vercel.app',
     siteName: 'Content Multiplier',
     locale: 'en_US',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Content Multiplier AI',
-    description: 'Turn any YouTube video into an All-in-One Content Pack in your own voice.',
+    description: 'Turn any YouTube video into an All-in-One Content Pack. Generate Blogs, LinkedIn, Tweets, and TikTok Scripts in your voice.',
   },
   verification: {
     google: 'h825GIngQeB8AvyGjTkUrueZ1W2y008wNAfDx475RWU',
