@@ -22,8 +22,11 @@ export async function GET(request: Request) {
       } else {
         return NextResponse.redirect(`${origin}${next}`)
       }
+    } else {
+      console.error("Auth error:", error);
+      return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error.message)}`)
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=Could not authenticate user`)
+  return NextResponse.redirect(`${origin}/login?error=No code provided`)
 }
