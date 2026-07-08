@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const { cookies } = await import('next/headers');
     const { createServerClient } = await import('@supabase/ssr');
     
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     let response = NextResponse.redirect(`${origin}${next}`)
     
     const supabase = createServerClient(
