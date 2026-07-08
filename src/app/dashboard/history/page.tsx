@@ -13,6 +13,7 @@ interface ContentPack {
   blog_post: string;
   linkedin_post: string;
   tweets: string[];
+  short_script: string;
 }
 
 export default function HistoryPage() {
@@ -70,6 +71,9 @@ export default function HistoryPage() {
               <button className={activeTab === 'blog' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('blog')} style={{ padding: '8px 24px' }}>Blog Post</button>
               <button className={activeTab === 'linkedin' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('linkedin')} style={{ padding: '8px 24px' }}>LinkedIn</button>
               <button className={activeTab === 'twitter' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('twitter')} style={{ padding: '8px 24px' }}>Twitter</button>
+              {selectedPack.short_script && (
+                <button className={activeTab === 'shortScript' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('shortScript')} style={{ padding: '8px 24px' }}>TikTok/Reels</button>
+              )}
             </div>
 
             <div className="fade-in-up">
@@ -108,6 +112,27 @@ export default function HistoryPage() {
                   </div>
                   <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1.05rem', color: '#ddd' }}>
                     {selectedPack.linkedin_post}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'shortScript' && selectedPack.short_script && (
+                <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
+                  <button 
+                    onClick={() => handleCopy(selectedPack.short_script, 'shortScript')}
+                    style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
+                  >
+                    {copied === 'shortScript' ? '✓ Copied!' : '📋 Copy'}
+                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}></div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Your Name</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>TikTok / Reels Script</div>
+                    </div>
+                  </div>
+                  <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1.05rem', color: '#ddd' }}>
+                    {selectedPack.short_script}
                   </div>
                 </div>
               )}

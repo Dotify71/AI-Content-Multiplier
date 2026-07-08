@@ -108,7 +108,7 @@ export async function POST(req: Request) {
     // 3. Construct the prompt
     let prompt = `You are an elite ghostwriter and content multiplier. 
 I will provide you with a raw transcript from a YouTube video. 
-Your job is to convert this transcript into a "Content Pack" consisting of 3 parts.
+Your job is to convert this transcript into a "Content Pack" consisting of 4 parts.
 
 ---
 RAW VIDEO TRANSCRIPT:
@@ -137,7 +137,8 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
     "Tweet 1...",
     "Tweet 2...",
     "Tweet 3..."
-  ]
+  ],
+  "shortScript": "A punchy, viral 60-second script for TikTok/Instagram Reels. Include visual cues in brackets like [Quick Zoom] or [Point to Text] and keep sentences extremely short and engaging."
 }`;
 
     // 4. Generate Content
@@ -161,6 +162,7 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
       blog_post: contentPack.blogPost,
       linkedin_post: contentPack.linkedinPost,
       tweets: contentPack.tweets,
+      short_script: contentPack.shortScript,
     });
 
     return NextResponse.json(contentPack);
