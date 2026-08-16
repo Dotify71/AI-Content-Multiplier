@@ -27,22 +27,25 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Determine if the current route requires authentication
+  const isProtectedPath = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/api/generate');
 
-  if (
-    !user &&
-    request.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  // Only make the network request to Supabase if we are on a protected route
+  if (isProtectedPath) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  // Protect the API route
-  if (!user && request.nextUrl.pathname.startsWith('/api/generate')) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/login'
+      return NextResponse.redirect(url)
+    }
+
+    // Protect the API route
+    if (!user && request.nextUrl.pathname.startsWith('/api/generate')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
   }
 
   return supabaseResponse
