@@ -103,7 +103,7 @@ export async function POST(req: Request) {
 
     // 2. Initialize Gemini API
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     // 3. Construct the prompt
     let prompt = `You are an elite ghostwriter and content multiplier. 
@@ -141,9 +141,30 @@ Please output a JSON object with exactly the following structure (do NOT wrap it
   "shortScript": "A punchy, viral 60-second script for TikTok/Instagram Reels. Include visual cues in brackets like [Quick Zoom] or [Point to Text] and keep sentences extremely short and engaging."
 }`;
 
-    // 4. Generate Content
-    const result = await model.generateContent(prompt);
-    const resultText = result.response.text();
+    // 4. Generate Content with Retry Logic
+    let resultText = '';
+    let maxRetries = 3;
+    let attempt = 0;
+    
+    while (attempt < maxRetries) {
+      try {
+        const result = await model.generateContent(prompt);
+        resultText = result.response.text();
+        break; // Success
+      } catch (err: any) {
+        attempt++;
+        console.error(`Gemini API attempt ${attempt} failed:`, err.message);
+        if (attempt >= maxRetries) {
+          // Check if it's a 503 error
+          if (err.message?.includes('503') || err.message?.includes('high demand')) {
+            return NextResponse.json({ error: 'The AI model is currently experiencing extremely high demand. Please try again in a minute.' }, { status: 503 });
+          }
+          throw err;
+        }
+        // Wait 2 seconds before retrying (exponential backoff would be better, but fixed delay is fine here)
+        await new Promise((resolve) => setTimeout(resolve, 2000 * attempt));
+      }
+    }
     let contentPack;
     try {
       const jsonStart = resultText.indexOf('{');
