@@ -197,13 +197,6 @@ export default function LoginPage() {
     try {
       setLoading(true);
       setAuthError("");
-
-      // Ensure absolutely no old PKCE cookies are stuck
-      document.cookie.split(";").forEach((c) => {
-        if (c.trim().startsWith("sb-")) {
-          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-        }
-      });
       
       const callbackUrl = `${window.location.origin}/auth/callback`;
 
