@@ -204,8 +204,6 @@ export default function LoginPage() {
           document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         }
       });
-
-      await fetch('/api/auth/logout', { method: 'POST' });
       
       const callbackUrl = `${window.location.origin}/auth/callback`;
 

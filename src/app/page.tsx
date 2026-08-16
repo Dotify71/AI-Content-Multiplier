@@ -17,7 +17,7 @@ export default function Home() {
         </h1>
         
         <p className="fade-in-up delay-2" style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px auto', lineHeight: 1.5 }}>
-          Paste a YouTube link. Upload a writing sample. Get a viral LinkedIn thread, 3 Tweets, an SEO Blog Post, and a TikTok script—written exactly how you sound.
+          Paste a YouTube link. Upload a writing sample. Get a viral LinkedIn thread, 3 Tweets, an SEO Blog Post, and a TikTok script - written exactly how you sound.
         </p>
         
         <div className="fade-in-up delay-3" style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
