@@ -58,7 +58,6 @@ export default function DashboardNavbar() {
   }, []);
 
   const handleLogout = async () => {
-    // Call server-side logout to clear HttpOnly cookies securely
     await fetch('/api/auth/logout', { method: 'POST' });
     await supabase.auth.signOut();
     window.location.href = '/';
@@ -69,62 +68,82 @@ export default function DashboardNavbar() {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      background: 'rgba(10, 10, 10, 0.7)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
+      background: 'rgba(8, 9, 13, 0.85)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
       borderBottom: '1px solid var(--glass-border)',
-      padding: '16px 24px',
+      padding: '14px 24px',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       flexWrap: 'wrap', gap: '16px'
     }}>
       {/* Brand & Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-        <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-          <span style={{ fontSize: '1.2rem', fontWeight: 700, background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            ContentMultiplier
+      <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
+            background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontWeight: 800,
+            fontSize: '0.9rem'
+          }}>
+            ✦
+          </div>
+          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.1rem', color: '#fff' }}>
+            Content<span style={{ color: '#818cf8' }}>Multiplier</span>
           </span>
         </Link>
-        <Link href="/dashboard/history" style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.95rem', fontWeight: 500, transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-          History
-        </Link>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <Link href="/dashboard" style={{ textDecoration: 'none', color: '#fff', fontSize: '0.9rem', fontWeight: 600, padding: '4px 10px', borderRadius: '6px', background: 'rgba(255, 255, 255, 0.05)' }}>
+            Studio
+          </Link>
+          <Link href="/dashboard/history" style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 500, transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+            Saved Packs
+          </Link>
+        </div>
       </div>
 
       {/* Center: Usage Tracker */}
       {!loading && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.03)', padding: '6px 16px', borderRadius: '24px', border: '1px solid var(--glass-border)' }}>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            Usage: <span style={{ color: '#fff', fontWeight: 600 }}>{usage} / {limit}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(255,255,255,0.03)', padding: '5px 14px', borderRadius: '24px', border: '1px solid var(--glass-border)' }}>
+          <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+            Usage: <strong style={{ color: '#fff' }}>{usage} / {limit}</strong>
           </span>
-          <span style={{ fontSize: '0.85rem', background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa', padding: '2px 10px', borderRadius: '12px', fontWeight: 600, textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '0.75rem', background: 'rgba(99, 102, 241, 0.15)', color: '#a5b4fc', border: '1px solid rgba(99, 102, 241, 0.25)', padding: '2px 8px', borderRadius: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
             {tier}
           </span>
         </div>
       )}
 
       {/* Right: Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         {email && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--accent-solid)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '5px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: '20px', border: '1px solid var(--glass-border)' }}>
+            <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #818cf8)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {email.charAt(0).toUpperCase()}
             </div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
               {email}
             </span>
           </div>
         )}
 
         {tier === 'free' || tier === 'basic' ? (
-          <Link href="/pricing" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>
+          <Link href="/pricing" className="btn-primary" style={{ padding: '6px 14px', fontSize: '0.84rem' }}>
             Upgrade
           </Link>
         ) : tier === 'pro' ? (
-          <Link href="/pricing" style={{ padding: '8px 18px', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none', fontWeight: 700, borderRadius: '24px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: '#fff', boxShadow: '0 0 16px rgba(245, 158, 11, 0.35)', transition: 'all 0.2s' }}>
+          <Link href="/pricing" style={{ padding: '6px 14px', fontSize: '0.84rem', fontWeight: 600, borderRadius: '8px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)', color: '#fff' }}>
             ⚡ Go Unlimited
           </Link>
         ) : null}
-        <button onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.9rem', transition: 'color 0.2s', padding: '8px' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-          Log out
+        
+        <button onClick={handleLogout} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.85rem', transition: 'color 0.2s', padding: '6px 8px' }} onMouseOver={e => e.currentTarget.style.color = '#fff'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-muted)'}>
+          Sign Out
         </button>
       </div>
     </nav>

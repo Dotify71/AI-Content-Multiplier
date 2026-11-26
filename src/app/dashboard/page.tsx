@@ -25,13 +25,39 @@ export default function Dashboard() {
   const supabase = createClient();
 
   const loadingMessages = [
-    "Analyzing Video & Cloning Voice...",
-    "Extracting key insights...",
-    "Writing your blog post...",
-    "Scripting TikToks & Reels...",
-    "Crafting a viral LinkedIn post...",
-    "Making something amazing for Twitter...",
-    "Polishing the final content pack..."
+    "Downloading YouTube video transcript...",
+    "Filtering out sponsors and tangents...",
+    "Calibrating sentence cadence & tone profile...",
+    "Drafting publication-ready long-form essay...",
+    "Structuring high-tension LinkedIn post...",
+    "Formatting viral Twitter/X thread hooks...",
+    "Composing 60-second video script...",
+    "Polishing final content pack..."
+  ];
+
+  const presets = [
+    {
+      label: "Ali Abdaal (Productivity)",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      voice: "Clear, friendly, actionable advice with bullet points, evidence-based reasoning, and zero fluff."
+    },
+    {
+      label: "Naval Ravikant (Mental Models)",
+      url: "https://www.youtube.com/watch?v=1-SVuFT45i8",
+      voice: "Aphoristic, concise, dense insights. Short sentences with punchy philosophical takeaways."
+    },
+    {
+      label: "Tech Architecture Deep Dive",
+      url: "https://www.youtube.com/watch?v=8qUcwC9hKOU",
+      voice: "Pragmatic software engineering perspective. Focused on trade-offs, scalability, and system topology."
+    }
+  ];
+
+  const tonePills = [
+    "⚡ Concise & Punchy",
+    "💼 Thought Leadership",
+    "☕ Casual Storyteller",
+    "🎓 Analytical Deep-Dive"
   ];
 
   useEffect(() => {
@@ -39,7 +65,7 @@ export default function Dashboard() {
     if (loading) {
       interval = setInterval(() => {
         setLoadingMessageIndex((prev) => (prev + 1) % loadingMessages.length);
-      }, 5000);
+      }, 4000);
     } else {
       // eslint-disable-next-line
       setLoadingMessageIndex(0);
@@ -60,15 +86,15 @@ export default function Dashboard() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const getYoutubeVideoId = (url: string) => {
+  const getYoutubeVideoId = (inputUrl: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
+    const match = inputUrl.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
   const handleGenerate = async () => {
     if (!url) {
-      setError("Please enter a YouTube URL");
+      setError("Please enter a valid YouTube video URL");
       return;
     }
     setLoading(true);
@@ -101,7 +127,7 @@ export default function Dashboard() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("An unknown error occurred.");
+        setError("An unexpected error occurred during generation.");
       }
     } finally {
       setLoading(false);
@@ -114,196 +140,360 @@ export default function Dashboard() {
   return (
     <>
       <DashboardNavbar />
-      <div className="main-container fade-in-up delay-1" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
+      <div className="main-container fade-in-up delay-1" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
+        
+        {/* Loading Progress State */}
         {loading ? (
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '8px', transition: 'all 0.3s ease' }}>
-              {loadingMessages[loadingMessageIndex]}
-            </h2>
-            <p style={{ color: 'var(--text-secondary)' }}>This usually takes about 20-60 seconds.</p>
-          </div>
-          
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
-            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
-            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
-            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
-            <div className="skeleton" style={{ width: '120px', height: '40px' }}></div>
-          </div>
+          <div style={{ maxWidth: '840px', margin: '40px auto', textAlign: 'center' }}>
+            <div className="glass-panel" style={{ padding: '48px 32px' }}>
+              <div style={{ marginBottom: '24px' }}>
+                <div className="spinner" style={{ width: '32px', height: '32px', borderWidth: '3px', borderColor: 'rgba(99, 102, 241, 0.2)', borderTopColor: 'var(--accent-primary)', margin: '0 auto' }}></div>
+              </div>
+              <h2 style={{ fontSize: '1.6rem', marginBottom: '10px' }}>
+                {loadingMessages[loadingMessageIndex]}
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                Transforming long-form video into 4 channel-native drafts. Takes ~20-40 seconds.
+              </p>
 
-          <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <div className="skeleton" style={{ width: '100%', height: '400px', borderRadius: '0' }}></div>
-            <div style={{ padding: '60px 80px' }}>
-               <div className="skeleton" style={{ width: '80%', height: '48px', marginBottom: '32px' }}></div>
-               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton" style={{ width: '90%', height: '20px', marginBottom: '40px' }}></div>
-               
-               <div className="skeleton" style={{ width: '60%', height: '32px', marginBottom: '24px' }}></div>
-               <div className="skeleton" style={{ width: '100%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton" style={{ width: '95%', height: '20px', marginBottom: '16px' }}></div>
-               <div className="skeleton" style={{ width: '85%', height: '20px', marginBottom: '16px' }}></div>
+              <div style={{ marginTop: '36px', display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '500px', margin: '36px auto 0 auto' }}>
+                <div className="skeleton" style={{ width: '100%', height: '14px' }}></div>
+                <div className="skeleton" style={{ width: '85%', height: '14px' }}></div>
+                <div className="skeleton" style={{ width: '92%', height: '14px' }}></div>
+              </div>
             </div>
           </div>
-        </div>
-      ) : !result ? (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '8px' }}>Create Content Pack</h1>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '40px' }}>Enter a YouTube video and a sample of your writing style.</p>
-          
-          <div className="glass-panel">
-            {error && <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '8px', marginBottom: '24px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>{error}</div>}
+        ) : !result ? (
+          /* Studio Input Workspace */
+          <div style={{ maxWidth: '840px', margin: '0 auto' }}>
             
+            <div style={{ marginBottom: '32px', textAlign: 'left' }}>
+              <div className="badge-pill" style={{ marginBottom: '10px' }}>
+                <span>✦ Video Repurposing Studio</span>
+              </div>
+              <h1 style={{ fontSize: '2.4rem', marginBottom: '8px' }}>Create New Content Pack</h1>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>
+                Paste any YouTube link to extract its insights into an X thread, LinkedIn post, long-form essay, and short-form video script.
+              </p>
+            </div>
+
+            {/* Quick Test Presets */}
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', fontWeight: 600, marginBottom: '8px' }}>YouTube Video URL</label>
-              <input 
-                type="text" 
-                placeholder="https://www.youtube.com/watch?v=..." 
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none' }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '32px' }}>
-              <label style={{ display: 'flex', alignItems: 'baseline', fontWeight: 600, marginBottom: '4px' }}>
-                Your Voice Clone Sample 
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 500, marginLeft: '8px', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '12px' }}>Optional</span>
-              </label>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '12px', lineHeight: 1.4 }}>
-                Paste 1-2 of your best performing social media posts, a blog excerpt, or simply type direct instructions (e.g. <i>&quot;Use punchy, short sentences. Professional but edgy tone.&quot;</i>)
-              </p>
-              <textarea 
-                placeholder="Paste your past writing or direct instructions here..." 
-                rows={6}
-                value={voiceSample}
-                onChange={(e) => setVoiceSample(e.target.value)}
-                style={{ width: '100%', padding: '16px', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', fontSize: '1rem', outline: 'none', resize: 'vertical' }}
-              />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '8px' }}>
-                We use this to analyze your exact tone, pacing, vocabulary, and sentence structure.
-              </p>
-            </div>
-
-            <button 
-              className="btn-primary" 
-              onClick={handleGenerate}
-              disabled={loading}
-              style={{ width: '100%', padding: '16px', fontSize: '1.1rem', opacity: loading ? 0.7 : 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
-            >
-              {loading ? (
-                <>
-                  <span className="spinner"></span> Extracting & Generating...
-                </>
-              ) : 'Generate Content Pack'}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <button 
-            onClick={() => setResult(null)}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            ← Back to generator
-          </button>
-          
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '32px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '16px' }}>
-            <button className={activeTab === 'blog' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('blog')} style={{ padding: '8px 24px' }}>Blog Post</button>
-            <button className={activeTab === 'linkedin' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('linkedin')} style={{ padding: '8px 24px' }}>LinkedIn</button>
-            <button className={activeTab === 'twitter' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('twitter')} style={{ padding: '8px 24px' }}>Twitter</button>
-            <button className={activeTab === 'shortScript' ? 'btn-primary' : 'btn-secondary'} onClick={() => setActiveTab('shortScript')} style={{ padding: '8px 24px' }}>TikTok/Reels</button>
-          </div>
-
-          <div className="fade-in-up">
-            {activeTab === 'blog' && (
-              <div style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                {thumbnailUrl && (
-                  // eslint-disable-next-line
-                  <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'cover' }} />
-                )}
-                <div style={{ padding: '60px 80px', position: 'relative' }} className="blog-content">
-                  <button 
-                     onClick={() => handleCopy(result.blogPost, 'blog')}
-                     style={{ position: 'absolute', top: '24px', right: '24px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-                   >
-                     {copied === 'blog' ? '✓ Copied!' : '📋 Copy Markdown'}
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 500 }}>
+                Try with a sample link:
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {presets.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setUrl(preset.url);
+                      setVoiceSample(preset.voice);
+                    }}
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid var(--glass-border)',
+                      color: 'var(--text-secondary)',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={e => e.currentTarget.style.color = '#fff'}
+                    onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}
+                  >
+                    ✦ {preset.label}
                   </button>
-                   <ReactMarkdown>{result.blogPost}</ReactMarkdown>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '36px', marginBottom: '32px' }}>
+              
+              {/* YouTube Link Field */}
+              <div style={{ marginBottom: '28px' }}>
+                <label style={{ display: 'block', fontSize: '0.92rem', fontWeight: 600, marginBottom: '8px', color: '#fff' }}>
+                  YouTube Video URL <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--glass-border)',
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    color: '#fff',
+                    fontSize: '1rem',
+                    outline: 'none',
+                    transition: 'border-color 0.2s',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'rgba(99, 102, 241, 0.6)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--glass-border)'}
+                />
+              </div>
+
+              {/* Thumbnail Preview if detected */}
+              {thumbnailUrl && (
+                <div style={{ marginBottom: '28px', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', position: 'relative', maxHeight: '220px' }}>
+                  {/* eslint-disable-next-line */}
+                  <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ position: 'absolute', bottom: '12px', left: '12px', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '6px', fontSize: '0.78rem', color: '#fff' }}>
+                    Video ID: {videoId}
+                  </div>
+                </div>
+              )}
+
+              {/* Tone Quick Selector */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
+                  Quick Voice Tone:
+                </label>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {tonePills.map((tone, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setVoiceSample(prev => prev ? `${prev}\nTone preference: ${tone}` : `Tone preference: ${tone}`)}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px solid var(--glass-border)',
+                        color: 'var(--text-secondary)',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {tone}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Writing Sample Voice Cloning */}
+              <div style={{ marginBottom: '32px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '0.92rem', fontWeight: 600, color: '#fff' }}>
+                    Writing Sample or Voice Directives <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(Optional)</span>
+                  </label>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Paste past tweets, essays, or guidelines</span>
+                </div>
+                <textarea
+                  rows={4}
+                  placeholder="Paste a paragraph of your own writing so the output mimics your rhythm, vocabulary, and sentence lengths..."
+                  value={voiceSample}
+                  onChange={(e) => setVoiceSample(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--glass-border)',
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    color: '#fff',
+                    fontSize: '0.95rem',
+                    outline: 'none',
+                    resize: 'vertical',
+                    lineHeight: 1.6,
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = 'rgba(99, 102, 241, 0.6)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--glass-border)'}
+                />
+              </div>
+
+              {/* Error Message */}
+              {error && (
+                <div style={{ padding: '12px 16px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', color: '#f87171', fontSize: '0.9rem', marginBottom: '24px' }}>
+                  {error}
+                </div>
+              )}
+
+              {/* Action Button */}
+              <button
+                type="button"
+                onClick={handleGenerate}
+                className="btn-primary"
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  fontSize: '1.05rem',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  color: '#fff',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 4px 20px rgba(99, 102, 241, 0.35)'
+                }}
+              >
+                ✦ Generate Multi-Platform Content Pack
+              </button>
+
+            </div>
+
+          </div>
+        ) : (
+          /* Result Output Studio */
+          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+            
+            {/* Header with Back & Actions */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <button
+                  onClick={() => setResult(null)}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.9rem', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  ← Create Another Pack
+                </button>
+                <h1 style={{ fontSize: '1.8rem', color: '#fff' }}>Your Generated Content Pack</h1>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  onClick={() => handleCopy(JSON.stringify(result, null, 2), 'all')}
+                  className="btn-secondary"
+                  style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+                >
+                  {copied === 'all' ? '✓ All Copied' : 'Export JSON'}
+                </button>
+              </div>
+            </div>
+
+            {/* Platform Tabs */}
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '28px', borderBottom: '1px solid var(--glass-border)', paddingBottom: '14px', flexWrap: 'wrap' }}>
+              <button 
+                className={`platform-pill ${activeTab === 'blog' ? 'active' : ''}`}
+                onClick={() => setActiveTab('blog')}
+              >
+                <span>✉</span> Long-Form Essay
+              </button>
+              <button 
+                className={`platform-pill ${activeTab === 'linkedin' ? 'active' : ''}`}
+                onClick={() => setActiveTab('linkedin')}
+              >
+                <span style={{ color: '#0a66c2' }}>in</span> LinkedIn Post
+              </button>
+              <button 
+                className={`platform-pill ${activeTab === 'twitter' ? 'active' : ''}`}
+                onClick={() => setActiveTab('twitter')}
+              >
+                <span>𝕏</span> Twitter / X Thread ({result.tweets.length})
+              </button>
+              <button 
+                className={`platform-pill ${activeTab === 'shortScript' ? 'active' : ''}`}
+                onClick={() => setActiveTab('shortScript')}
+              >
+                <span style={{ color: '#ec4899' }}>▶</span> Reels / TikTok Script
+              </button>
+            </div>
+
+            {/* Tab: Blog Post */}
+            {activeTab === 'blog' && (
+              <div className="glass-panel" style={{ padding: '48px 40px', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '16px' }}>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Substack & SEO Article</span>
+                  <button 
+                    onClick={() => handleCopy(result.blogPost, 'blog')}
+                    className="btn-secondary"
+                    style={{ padding: '6px 14px', fontSize: '0.82rem' }}
+                  >
+                    {copied === 'blog' ? '✓ Copied Markdown' : 'Copy Markdown'}
+                  </button>
+                </div>
+                <div className="blog-content">
+                  <ReactMarkdown>{result.blogPost}</ReactMarkdown>
                 </div>
               </div>
             )}
 
+            {/* Tab: LinkedIn */}
             {activeTab === 'linkedin' && (
-              <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
-                <button 
-                  onClick={() => handleCopy(result.linkedinPost, 'linkedin')}
-                  style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
-                >
-                  {copied === 'linkedin' ? '✓ Copied!' : '📋 Copy'}
-                </button>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
-                  <div>
-                    <div style={{ fontWeight: 600 }}>{userEmail ? userEmail.split('@')[0] : 'Your Name'}</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Just now • 🌍</div>
+              <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: '32px', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #0a66c2, #004182)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 'bold' }}>
+                      {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, color: '#fff' }}>{userEmail ? userEmail.split('@')[0] : 'Creator'}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Thought Leader • Just now • 🌐</div>
+                    </div>
                   </div>
+                  <button 
+                    onClick={() => handleCopy(result.linkedinPost, 'linkedin')}
+                    className="btn-secondary"
+                    style={{ padding: '6px 14px', fontSize: '0.82rem' }}
+                  >
+                    {copied === 'linkedin' ? '✓ Copied' : 'Copy Post'}
+                  </button>
                 </div>
-                <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1.05rem', color: '#ddd' }}>
+                <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '1.02rem', color: '#e2e8f0' }}>
                   {result.linkedinPost}
                 </div>
               </div>
             )}
 
-            {activeTab === 'shortScript' && (
-              <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto', background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
-                <button 
-                  onClick={() => handleCopy(result.shortScript, 'shortScript')}
-                  style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
-                >
-                  {copied === 'shortScript' ? '✓ Copied!' : '📋 Copy'}
-                </button>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}></div>
-                  <div>
-                    <div style={{ fontWeight: 600 }}>{userEmail ? userEmail.split('@')[0] : 'Your Name'}</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>TikTok / Reels Script</div>
-                  </div>
-                </div>
-                <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1.05rem', color: '#ddd' }}>
-                  {result.shortScript}
-                </div>
-              </div>
-            )}
-
+            {/* Tab: Twitter Thread */}
             {activeTab === 'twitter' && (
-              <div style={{ maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ maxWidth: '680px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {result.tweets.map((tweet: string, i: number) => (
-                  <div key={i} className="glass-panel" style={{ background: 'rgba(255,255,255,0.02)', position: 'relative' }}>
-                    <button 
-                      onClick={() => handleCopy(tweet, `tweet-${i}`)}
-                      style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
-                    >
-                      {copied === `tweet-${i}` ? '✓ Copied!' : '📋 Copy'}
-                    </button>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-solid)' }}></div>
-                      <div>
-                        <div style={{ fontWeight: 600 }}>{userEmail ? userEmail.split('@')[0] : 'Your Name'}</div>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>@{userEmail ? userEmail.split('@')[0] : 'yourhandle'}</div>
+                  <div key={i} className="glass-panel" style={{ padding: '24px', position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                          {i + 1}
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 600, fontSize: '0.92rem', color: '#fff' }}>Thread Part {i + 1} of {result.tweets.length}</div>
+                          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>@{userEmail ? userEmail.split('@')[0] : 'creator'}</div>
+                        </div>
                       </div>
+                      <button 
+                        onClick={() => handleCopy(tweet, `tweet-${i}`)}
+                        className="btn-secondary"
+                        style={{ padding: '4px 12px', fontSize: '0.8rem' }}
+                      >
+                        {copied === `tweet-${i}` ? '✓ Copied' : 'Copy'}
+                      </button>
                     </div>
-                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.5, fontSize: '1.1rem', color: '#ddd' }}>
+                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1rem', color: '#e2e8f0' }}>
                       {tweet}
                     </div>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Tab: TikTok / Reels Script */}
+            {activeTab === 'shortScript' && (
+              <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: '32px', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ec4899', display: 'inline-block' }}></span>
+                    <span style={{ fontWeight: 600, fontSize: '0.95rem', color: '#fff' }}>Teleprompter & Director Script</span>
+                  </div>
+                  <button 
+                    onClick={() => handleCopy(result.shortScript, 'shortScript')}
+                    className="btn-secondary"
+                    style={{ padding: '6px 14px', fontSize: '0.82rem' }}
+                  >
+                    {copied === 'shortScript' ? '✓ Copied' : 'Copy Script'}
+                  </button>
+                </div>
+                <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '1rem', color: '#e2e8f0', fontFamily: 'var(--font-mono)' }}>
+                  {result.shortScript}
+                </div>
+              </div>
+            )}
+
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </>
   );
 }
