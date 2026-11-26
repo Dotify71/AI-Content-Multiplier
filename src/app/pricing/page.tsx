@@ -79,7 +79,7 @@ export default function PricingPage() {
               }
             }
           },
-          theme: { color: "#8b5cf6" }
+          theme: { color: "#6366f1" }
         };
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -99,169 +99,191 @@ export default function PricingPage() {
       setLoading(null);
     }
   };
+
+  const isProHighlighted = currentTier !== 'pro' && currentTier !== 'unlimited';
+  const isUnlimitedHighlighted = currentTier === 'pro';
+
   return (
-    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '80px', paddingBottom: '120px', position: 'relative' }}>
-      <Link href="/dashboard" style={{ position: 'absolute', top: '32px', right: '32px', width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', textDecoration: 'none', background: 'rgba(255,255,255,0.05)', transition: 'all 0.2s', cursor: 'pointer' }}
-        onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
-        onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </Link>
+    <div className="main-container fade-in-up delay-1" style={{ paddingTop: '60px', paddingBottom: '120px', position: 'relative' }}>
       
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 600, marginBottom: '16px', letterSpacing: '-0.02em' }}>Plans & Pricing</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '64px', fontSize: '1.1rem' }}>Stop spending 10 hours a week on content. Let AI do it in 30 seconds.</p>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', textAlign: 'left' }}>
-          
-          {(() => {
-            const isProHighlighted = currentTier !== 'pro' && currentTier !== 'unlimited';
-            const isUnlimitedHighlighted = currentTier === 'pro';
-
-            return (
-              <>
-          {/* Basic Tier */}
-          <div className="pricing-card">
-            {/* SVG Icon matching Claude's aesthetic */}
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="1.5" style={{ marginBottom: '32px' }}>
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-
-            <h2 style={{ fontSize: '2rem', fontWeight: 500, marginBottom: '8px', letterSpacing: '-0.02em' }}>Basic</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>For casual creators starting out</p>
-            
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹499</span>
-            </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month. Billed monthly.</p>
-            
-            {currentTier === 'basic' ? (
-              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
-                Your current plan
-              </button>
-            ) : (currentTier === 'pro' || currentTier === 'unlimited') ? (
-              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
-                Included in your plan
-              </button>
-            ) : (
-              <button onClick={() => handleUpgrade('basic')} disabled={loading === 'basic'} className="pricing-btn-outline" style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
-                {loading === 'basic' ? 'Loading...' : 'Get Started'}
-              </button>
-            )}
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-              <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Includes:</div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>5 video conversions per week</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>SEO Blog Post Generation</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>LinkedIn & Twitter Threads</span>
-              </div>
-            </div>
+      {/* Top Navigation Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'linear-gradient(135deg, #6366f1, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.85rem', fontWeight: 'bold' }}>
+            ✦
           </div>
+          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.1rem', color: '#fff' }}>
+            Content<span style={{ color: '#818cf8' }}>Multiplier</span>
+          </span>
+        </Link>
 
-          {/* Pro Tier */}
-          <div className="pricing-card" style={isProHighlighted ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.15)' } : {}}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={isProHighlighted ? "var(--text-primary)" : "var(--text-secondary)"} strokeWidth="1.5" style={{ marginBottom: '32px' }}>
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-
-            <h2 style={{ fontSize: '2rem', fontWeight: 500, marginBottom: '8px', letterSpacing: '-0.02em' }}>Pro</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>For everyday productivity</p>
-            
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹999</span>
-            </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month with annual subscription discount ($80 billed up front). $10 if billed monthly.</p>
-            
-            {currentTier === 'pro' ? (
-              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
-                Your current plan
-              </button>
-            ) : (currentTier === 'unlimited') ? (
-              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
-                Included in your plan
-              </button>
-            ) : (
-              <button onClick={() => handleUpgrade('pro')} disabled={loading === 'pro'} className={isProHighlighted ? "pricing-btn" : "pricing-btn-outline"} style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
-                {loading === 'pro' ? 'Loading...' : 'Start Pro'}
-              </button>
-            )}
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-              <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Basic, plus:</div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>10 video conversions per day</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>Priority Generation Speed</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>Early access to new features</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Unlimited/Max Tier */}
-          <div className="pricing-card" style={isUnlimitedHighlighted ? { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.15)' } : {}}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={isUnlimitedHighlighted ? "var(--text-primary)" : "var(--text-secondary)"} strokeWidth="1.5" style={{ marginBottom: '32px' }}>
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              <path d="M2 12h20"/>
-            </svg>
-
-            <h2 style={{ fontSize: '2rem', fontWeight: 500, marginBottom: '8px', letterSpacing: '-0.02em' }}>Unlimited</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '32px', fontSize: '0.95rem' }}>Get the most out of ContentMultiplier</p>
-            
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '2.5rem', fontWeight: 500 }}>₹1999</span>
-            </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '32px', minHeight: '40px' }}>Per month.</p>
-            
-            {currentTier === 'unlimited' ? (
-              <button disabled style={{ marginBottom: '40px', width: '100%', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '12px 16px', fontSize: '1rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-secondary)' }}>
-                Your current plan
-              </button>
-            ) : (
-              <button onClick={() => handleUpgrade('unlimited')} disabled={loading === 'unlimited'} className={isUnlimitedHighlighted ? "pricing-btn" : "pricing-btn-outline"} style={{ marginBottom: '40px', width: '100%', cursor: 'pointer', border: 'none', padding: '16px', fontSize: '1.1rem', borderRadius: '24px' }}>
-                {loading === 'unlimited' ? 'Loading...' : 'Start Unlimited'}
-              </button>
-            )}
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1 }}>
-              <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '8px' }}>Everything in Pro, plus:</div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>Unlimited video conversions</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>Custom Voice Cloning AI</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <span style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>✓</span>
-                <span style={{ fontSize: '0.95rem', color: '#eaeaea' }}>Priority access at high traffic times</span>
-              </div>
-            </div>
-          </div>
-              </>
-            );
-          })()}
-
-        </div>
+        <Link href="/dashboard" className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.88rem' }}>
+          ← Back to Studio
+        </Link>
       </div>
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 64px auto' }}>
+        <div className="badge-pill" style={{ marginBottom: '14px' }}>
+          <span>Simple, Transparent Pricing</span>
+        </div>
+        <h1 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', fontWeight: 800, marginBottom: '16px', letterSpacing: '-0.03em' }}>
+          Plans for creators who publish with intent.
+        </h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+          Stop spending 12 hours a week manually drafting threads and essays. Multiply your reach in minutes.
+        </p>
+      </div>
+
+      {/* Pricing Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px', maxWidth: '1100px', margin: '0 auto' }}>
+        
+        {/* Basic Tier */}
+        <div className="pricing-card">
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: '#fff' }}>Starter</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>For casual creators testing weekly repurposing</p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-heading)' }}>₹499</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>/ month</span>
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '28px' }}>Cancel anytime. Zero commitment.</p>
+
+          {currentTier === 'basic' ? (
+            <button disabled style={{ marginBottom: '32px', width: '100%', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '12px', fontSize: '0.95rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', cursor: 'not-allowed' }}>
+              Current Plan
+            </button>
+          ) : (currentTier === 'pro' || currentTier === 'unlimited') ? (
+            <button disabled style={{ marginBottom: '32px', width: '100%', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '12px', fontSize: '0.95rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', cursor: 'not-allowed' }}>
+              Included in Your Plan
+            </button>
+          ) : (
+            <button 
+              onClick={() => handleUpgrade('basic')} 
+              disabled={loading === 'basic'}
+              className="btn-secondary"
+              style={{ marginBottom: '32px', width: '100%', padding: '12px' }}
+            >
+              {loading === 'basic' ? 'Connecting to Razorpay...' : 'Get Starter'}
+            </button>
+          )}
+
+          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, fontSize: '0.92rem' }}>
+            <div style={{ fontWeight: 600, color: '#fff', marginBottom: '4px' }}>Plan includes:</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> 5 video conversions per week
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> Long-form SEO blog & newsletter
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> X / Twitter thread formatting
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> High-converting LinkedIn posts
+            </div>
+          </div>
+        </div>
+
+        {/* Pro Tier (Featured) */}
+        <div className="pricing-card featured" style={{ position: 'relative' }}>
+          
+          <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #6366f1, #a855f7)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', letterSpacing: '0.04em', textTransform: 'uppercase', boxShadow: '0 4px 12px rgba(99,102,241,0.4)' }}>
+            Most Popular
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: '#fff' }}>Creator Pro</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>For active weekly publishers & growing channels</p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-heading)' }}>₹999</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>/ month</span>
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '28px' }}>Priority GPU compute & faster conversion speeds.</p>
+
+          {currentTier === 'pro' ? (
+            <button disabled style={{ marginBottom: '32px', width: '100%', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '12px', fontSize: '0.95rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', cursor: 'not-allowed' }}>
+              Current Plan
+            </button>
+          ) : (
+            <button 
+              onClick={() => handleUpgrade('pro')} 
+              disabled={loading === 'pro'}
+              className="btn-primary"
+              style={{ marginBottom: '32px', width: '100%', padding: '12px', background: '#6366f1', color: '#fff', border: 'none' }}
+            >
+              {loading === 'pro' ? 'Connecting to Razorpay...' : 'Upgrade to Creator Pro'}
+            </button>
+          )}
+
+          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, fontSize: '0.92rem' }}>
+            <div style={{ fontWeight: 600, color: '#fff', marginBottom: '4px' }}>Everything in Starter, plus:</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>✓</span> 10 video conversions per day (300/mo)
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>✓</span> TikTok / Reels script teleprompter
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>✓</span> Custom writing voice calibration
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>✓</span> Priority processing during peak hours
+            </div>
+          </div>
+        </div>
+
+        {/* Unlimited Tier */}
+        <div className="pricing-card">
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: '#fff' }}>Agency Unlimited</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>For media teams, agencies, and prolific founders</p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '8px' }}>
+            <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', fontFamily: 'var(--font-heading)' }}>₹1,999</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>/ month</span>
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '28px' }}>Zero caps. Maximum conversion velocity.</p>
+
+          {currentTier === 'unlimited' ? (
+            <button disabled style={{ marginBottom: '32px', width: '100%', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '12px', fontSize: '0.95rem', background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)', cursor: 'not-allowed' }}>
+              Current Plan
+            </button>
+          ) : (
+            <button 
+              onClick={() => handleUpgrade('unlimited')} 
+              disabled={loading === 'unlimited'}
+              className="btn-secondary"
+              style={{ marginBottom: '32px', width: '100%', padding: '12px' }}
+            >
+              {loading === 'unlimited' ? 'Connecting to Razorpay...' : 'Get Unlimited'}
+            </button>
+          )}
+
+          <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, fontSize: '0.92rem' }}>
+            <div style={{ fontWeight: 600, color: '#fff', marginBottom: '4px' }}>Everything in Creator Pro, plus:</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> Unlimited video conversions
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> Multi-persona voice switching
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> Instant generation queue (zero wait)
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1' }}>
+              <span style={{ color: 'var(--accent-emerald)' }}>✓</span> Early access to new platform models
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   );
 }
