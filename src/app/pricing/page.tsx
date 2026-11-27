@@ -79,7 +79,7 @@ export default function PricingPage() {
               }
             }
           },
-          theme: { color: "#6366f1" }
+          theme: { color: "#f59e0b" }
         };
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,11 +109,11 @@ export default function PricingPage() {
       {/* Top Navigation Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'linear-gradient(135deg, #6366f1, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.85rem', fontWeight: 'bold' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0c0d12', fontSize: '0.85rem', fontWeight: 'bold' }}>
             ✦
           </div>
           <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.1rem', color: '#fff' }}>
-            Content<span style={{ color: '#818cf8' }}>Multiplier</span>
+            Content<span style={{ color: '#fbbf24' }}>Multiplier</span>
           </span>
         </Link>
 
@@ -190,7 +190,7 @@ export default function PricingPage() {
         {/* Pro Tier (Featured) */}
         <div className="pricing-card featured" style={{ position: 'relative' }}>
           
-          <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #6366f1, #a855f7)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, padding: '4px 14px', borderRadius: '12px', letterSpacing: '0.04em', textTransform: 'uppercase', boxShadow: '0 4px 12px rgba(99,102,241,0.4)' }}>
+          <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#0c0d12', fontSize: '0.75rem', fontWeight: 800, padding: '4px 14px', borderRadius: '12px', letterSpacing: '0.04em', textTransform: 'uppercase', boxShadow: '0 4px 14px rgba(245,158,11,0.4)' }}>
             Most Popular
           </div>
 
@@ -213,8 +213,8 @@ export default function PricingPage() {
             <button 
               onClick={() => handleUpgrade('pro')} 
               disabled={loading === 'pro'}
-              className="btn-primary"
-              style={{ marginBottom: '32px', width: '100%', padding: '12px', background: '#6366f1', color: '#fff', border: 'none' }}
+              className="btn-amber"
+              style={{ marginBottom: '32px', width: '100%', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}
             >
               {loading === 'pro' ? 'Connecting to Razorpay...' : 'Upgrade to Creator Pro'}
             </button>

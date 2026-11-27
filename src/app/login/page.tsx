@@ -62,8 +62,8 @@ function InteractiveSimulator() {
 
         <button 
           onClick={startDemo}
-          className="btn-primary"
-          style={{ width: '100%', padding: '12px', background: '#6366f1', color: '#fff', border: 'none' }}
+          className="btn-amber"
+          style={{ width: '100%', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 700 }}
         >
           ✦ Run Instant Test Drive
         </button>
@@ -79,7 +79,7 @@ function InteractiveSimulator() {
         <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', margin: '0 0 20px' }}>Transcribing and applying voice vector mapping</p>
         
         <div style={{ width: '100%', maxWidth: '280px', height: '4px', background: 'rgba(255, 255, 255, 0.06)', borderRadius: '4px', overflow: 'hidden' }}>
-          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #6366f1, #a855f7)', borderRadius: '4px', transition: 'width 0.12s ease-out' }}></div>
+          <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #f59e0b, #d97706)', borderRadius: '4px', transition: 'width 0.12s ease-out' }}></div>
         </div>
       </div>
     );
@@ -196,7 +196,7 @@ export default function LoginPage() {
           
           <div className="glass-panel" style={{ padding: '36px 30px', textAlign: 'center', background: 'rgba(16, 18, 27, 0.9)' }}>
             
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #6366f1, #a855f7)', color: '#fff', fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '16px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#0c0d12', fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '16px' }}>
               ✦
             </div>
 
