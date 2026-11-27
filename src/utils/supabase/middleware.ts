@@ -6,9 +6,13 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -27,26 +31,16 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // Determine if the current route requires authentication
-  const isProtectedPath = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/api/generate');
-
-  // Only make the network request to Supabase if we are on a protected route
-  if (isProtectedPath) {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      return NextResponse.redirect(url)
-    }
-
-    // Protect the API route
-    if (!user && request.nextUrl.pathname.startsWith('/api/generate')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  // Protected routes that strictly require an active Supabase user account
+  const isHistoryPath = request.nextUrl.pathname.startsWith('/dashboard/history');
+  if (isHistoryPath) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      return NextResponse.redirect(url);
     }
   }
 
-  return supabaseResponse
+  return supabaseResponse;
 }
