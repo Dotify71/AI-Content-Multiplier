@@ -7,7 +7,7 @@
 
 ## Overview
 
-Most AI content tools generate generic, robotic summaries packed with cliché emojis and corporate jargon. **ContentMultiplier** treats your video transcript as proprietary source material—isolating core arguments, matching your unique writing cadence, and repackaging ideas into platform-native formats.
+Most AI content tools generate generic, robotic summaries packed with cliché emojis and corporate jargon. **ContentMultiplier** treats your video transcript as proprietary source material - isolating core arguments, matching your unique writing cadence, and repackaging ideas into platform-native formats.
 
 ### Core Capabilities
 
