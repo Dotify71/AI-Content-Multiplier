@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 export default function RootHeader({ userEmail }: { userEmail: string | undefined }) {
   const pathname = usePathname();
   
-  // Hide on dashboard and login which have their own specialized chrome
   if (pathname?.startsWith('/dashboard') || pathname === '/login') {
     return null;
   }
@@ -15,33 +14,33 @@ export default function RootHeader({ userEmail }: { userEmail: string | undefine
       position: 'sticky', 
       top: 0, 
       zIndex: 50,
-      background: 'rgba(8, 9, 13, 0.75)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
+      background: 'rgba(12, 13, 18, 0.8)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
       borderBottom: '1px solid var(--glass-border)',
       padding: '16px 0'
     }}>
       <div className="main-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         
-        {/* Brand Logo with Icon */}
+        {/* Brand Logo with Luxury Warm Gold Mark */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
           <div style={{
             width: '32px',
             height: '32px',
             borderRadius: '8px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#fff',
+            color: '#0c0d12',
             fontWeight: 800,
             fontSize: '1rem',
-            boxShadow: '0 2px 10px rgba(99, 102, 241, 0.35)'
+            boxShadow: '0 2px 14px rgba(245, 158, 11, 0.35)'
           }}>
             ✦
           </div>
-          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.15rem', letterSpacing: '-0.02em', color: '#fff' }}>
-            Content<span style={{ color: '#818cf8' }}>Multiplier</span>
+          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.15rem', letterSpacing: '-0.025em', color: '#fff' }}>
+            Content<span style={{ color: '#fbbf24' }}>Multiplier</span>
           </span>
         </Link>
 
@@ -63,7 +62,7 @@ export default function RootHeader({ userEmail }: { userEmail: string | undefine
           {userEmail ? (
             <Link href="/dashboard" className="btn-secondary" style={{ padding: '8px 18px', fontSize: '0.88rem' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-emerald)', display: 'inline-block' }}></span>
-              Dashboard
+              Studio
             </Link>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
