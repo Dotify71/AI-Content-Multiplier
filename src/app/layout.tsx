@@ -36,15 +36,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  let userEmail: string | undefined = undefined;
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    userEmail = user?.email;
+  } catch {
+    userEmail = undefined;
+  }
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <Suspense fallback={null}>
           <OAuthRedirect />
         </Suspense>
-        <RootHeader userEmail={user?.email} />
+        <RootHeader userEmail={userEmail} />
         <main style={{ flex: 1 }}>
           {children}
         </main>
