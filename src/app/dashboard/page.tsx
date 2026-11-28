@@ -82,21 +82,41 @@ export default function Dashboard() {
     // eslint-disable-next-line
   }, []);
 
-  const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(id);
-    setTimeout(() => setCopied(null), 2000);
+  const handleCopy = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(id);
+      setTimeout(() => setCopied(null), 2000);
+    } catch {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setCopied(id);
+        setTimeout(() => setCopied(null), 2000);
+      } catch {
+        // Safe silent fail
+      }
+    }
   };
 
   const handleDownloadMarkdown = () => {
     if (!result) return;
-    const fullMarkdown = `# Content Multiplier Campaign Pack\nSource: ${url}\nDate: ${new Date().toLocaleDateString()}\n\n---\n\n## 1. Long-Form Essay & Newsletter\n\n${result.blogPost}\n\n---\n\n## 2. LinkedIn Thought Leadership\n\n${result.linkedinPost}\n\n---\n\n## 3. Twitter / X Thread\n\n${result.tweets.map((t, idx) => `### Tweet ${idx + 1}\n${t}`).join('\n\n')}\n\n---\n\n## 4. Short-Form Video Script\n\n${result.shortScript}\n`;
+    const fullMarkdown = `# Content Multiplier Campaign Pack\nSource: ${url}\nDate: ${new Date().toLocaleDateString()}\n\n---\n\n## 1. Long-Form Essay & Newsletter\n\n${result.blogPost}\n\n---\n\n## 2. LinkedIn Thought Leadership\n\n${result.linkedinPost}\n\n---\n\n## 3. Twitter / X Thread\n\n${(result.tweets || []).map((t, idx) => `### Tweet ${idx + 1}\n${t}`).join('\n\n')}\n\n---\n\n## 4. Short-Form Video Script\n\n${result.shortScript}\n`;
     
     const blob = new Blob([fullMarkdown], { type: 'text/markdown;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `content-pack-${Date.now()}.md`;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1500);
   };
 
   const getYoutubeVideoId = (inputUrl: string) => {
@@ -146,7 +166,7 @@ export default function Dashboard() {
   return (
     <>
       <DashboardNavbar />
-      <div className="main-container fade-in-up delay-1" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
+      <div className="main-container fade-in-up delay-1" style={{ paddingTop: 'clamp(124px, 14vw, 144px)', paddingBottom: '100px' }}>
         
         {/* Loading State */}
         {loading ? (
@@ -280,12 +300,12 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Thumbnail Preview */}
+              {/* Thumbnail Preview with full 16:9 uncropped aspect ratio */}
               {thumbnailUrl && (
-                <div style={{ marginBottom: '24px', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', position: 'relative', maxHeight: '200px' }}>
+                <div style={{ marginBottom: '24px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.5)', position: 'relative' }}>
                   {/* eslint-disable-next-line */}
-                  <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <div style={{ position: 'absolute', bottom: '10px', left: '12px', background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '6px', fontSize: '0.78rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <img src={thumbnailUrl} alt="Video Thumbnail" style={{ width: '100%', height: 'auto', aspectRatio: '16/9', maxHeight: '380px', objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+                  <div style={{ position: 'absolute', bottom: '12px', left: '12px', background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '6px', fontSize: '0.8rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-emerald)', display: 'inline-block' }}></span>
                     Video Linked: {videoId}
                   </div>

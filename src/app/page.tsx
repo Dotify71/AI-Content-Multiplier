@@ -7,10 +7,27 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<'twitter' | 'linkedin' | 'newsletter' | 'script'>('twitter');
   const [copiedTab, setCopiedTab] = useState<string | null>(null);
 
-  const handleCopy = (text: string, tab: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedTab(tab);
-    setTimeout(() => setCopiedTab(null), 2000);
+  const handleCopy = async (text: string, tab: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedTab(tab);
+      setTimeout(() => setCopiedTab(null), 2000);
+    } catch {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        setCopiedTab(tab);
+        setTimeout(() => setCopiedTab(null), 2000);
+      } catch {
+        // Safe fallback
+      }
+    }
   };
 
   const sampleOutputs = {

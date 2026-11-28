@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 export default function RootHeader({ userEmail }: { userEmail: string | undefined }) {
   const pathname = usePathname();
   
-  if (pathname?.startsWith('/dashboard') || pathname === '/login') {
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/pricing') || pathname === '/login') {
     return null;
   }
 

@@ -66,13 +66,14 @@ export default function DashboardNavbar() {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      background: 'rgba(12, 13, 18, 0.85)',
+      background: 'rgba(12, 13, 18, 0.92)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderBottom: '1px solid var(--glass-border)',
-      padding: '14px 24px',
+      padding: '12px clamp(12px, 3vw, 24px)',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      flexWrap: 'wrap', gap: '16px'
+      flexWrap: 'wrap', gap: '10px 16px',
+      minHeight: '60px'
     }}>
       {/* Brand & Studio Tabs */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
