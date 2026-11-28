@@ -3,32 +3,105 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@/utils/supabase/server';
 import { getCleanTranscript } from '@/utils/transcript';
 
-function extractVideoId(url: string): string | null {
+// Sliding-window IP rate limiter to protect API quota against automated bot abuse
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const windowMs = 10 * 60 * 1000; // 10 minutes
+  const maxRequests = 25; // 25 generations per 10 min window per IP
+
+  const record = rateLimitMap.get(ip);
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (record.count >= maxRequests) {
+    return false;
+  }
+  record.count += 1;
+  return true;
+}
+
+function extractVideoId(rawUrl: string): string | null {
+  if (!rawUrl || typeof rawUrl !== 'string') return null;
+  const trimmed = rawUrl.trim();
+
+  // If already pure 11-char ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+
   try {
-    const shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-    if (shortMatch) return shortMatch[1];
-    const longMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-    if (longMatch) return longMatch[1];
-    if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
-  } catch { }
+    const parsed = new URL(trimmed.startsWith('http') ? trimmed : `https://${trimmed}`);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    
+    // Strict domain whitelist prevents SSRF to internal/unrelated networks
+    const validHosts = ['youtube.com', 'm.youtube.com', 'youtu.be', 'music.youtube.com'];
+    if (!validHosts.includes(host)) {
+      return null;
+    }
+
+    if (host === 'youtu.be') {
+      const id = parsed.pathname.slice(1).split('/')[0];
+      return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+    }
+
+    const v = parsed.searchParams.get('v');
+    if (v && /^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
+
+    const pathMatch = parsed.pathname.match(/\/(?:embed|v|shorts)\/([a-zA-Z0-9_-]{11})/);
+    if (pathMatch) return pathMatch[1];
+  } catch {
+    const match = trimmed.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+  }
   return null;
+}
+
+function safeParseJSON(raw: string) {
+  try {
+    // Strip markdown fences if present
+    let cleaned = raw.trim();
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    }
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    if (start !== -1 && end !== -1 && end > start) {
+      cleaned = cleaned.substring(start, end + 1);
+    }
+    return JSON.parse(cleaned);
+  } catch {
+    return null;
+  }
 }
 
 export async function POST(req: Request) {
   try {
-    const { url, voiceSample } = await req.json();
+    // Rate limit check based on client IP
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'anonymous';
+    if (!checkRateLimit(clientIp)) {
+      return NextResponse.json({ error: 'Too many requests. Please wait a few minutes before generating more content.' }, { status: 429 });
+    }
 
-    if (!url) {
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+
+    const rawUrl = typeof body.url === 'string' ? body.url.slice(0, 500) : '';
+    const rawVoice = typeof body.voiceSample === 'string' ? body.voiceSample.slice(0, 4000) : '';
+
+    if (!rawUrl) {
       return NextResponse.json({ error: 'YouTube URL is required' }, { status: 400 });
     }
 
-    const videoId = extractVideoId(url);
+    const videoId = extractVideoId(rawUrl);
     if (!videoId) {
       return NextResponse.json({ error: 'Invalid YouTube link. Please paste a standard YouTube video URL.' }, { status: 400 });
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json({ error: 'GEMINI_API_KEY is not configured on the server.' }, { status: 500 });
+      return NextResponse.json({ error: 'Server AI configuration is missing.' }, { status: 500 });
     }
 
     // Optional user authentication (allows guest demo for portfolio reviewers)
@@ -42,7 +115,7 @@ export async function POST(req: Request) {
       user = null;
     }
 
-    // If logged in, check quota limits
+    // If logged in, enforce user tier limits
     if (user && supabase) {
       const { data: profile } = await supabase.from('profiles').select('tier').eq('id', user.id).single();
       const tier = profile?.tier || 'free';
@@ -80,7 +153,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: msg }, { status: 400 });
     }
 
-    // 2. Initialize Gemini API with robust model fallbacks
+    // 2. Initialize Gemini API with robust model fallback cascade
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const candidateModels = [
       'gemini-3.5-flash-lite',
@@ -89,7 +162,6 @@ export async function POST(req: Request) {
       'gemini-flash-latest'
     ];
 
-    // Truncate to reasonable token length (~18,000 characters to keep generation lightning-fast)
     const truncatedTranscript = fullTranscript.slice(0, 18000);
 
     let prompt = `You are an elite editorial ghostwriter and content repurposing strategist. 
@@ -101,11 +173,11 @@ ${truncatedTranscript}
 ---
 `;
 
-    if (voiceSample && voiceSample.trim().length > 0) {
+    if (rawVoice && rawVoice.trim().length > 0) {
       prompt += `
 ---
 DESIRED VOICE, TONE & VOCABULARY GUIDELINES:
-${voiceSample}
+${rawVoice}
 ---
 Strictly adopt the rhythm, vocabulary level, sentence variety, and tone described above. Avoid generic corporate clichés.`;
     }
@@ -122,7 +194,7 @@ Output a single valid JSON object with EXACTLY this structure (do NOT enclose in
     "Deep-dive supporting point with concrete details or numbers...",
     "Takeaway / conclusion tweet with actionable summary..."
   ],
-  "shortScript": "A 60-second video script for Reels/TikTok with bracketed visual cues like [Talking Head - Punch Zoom], [B-Roll: Code Editor], [Text On Screen], fast pacing, and a crisp opening hook."
+  "shortScript": "A 60-second video script for Reels/TikTok with bracketed visual cues like [Talking Head: Punch Zoom], [B-Roll: Code Editor], [Text On Screen], fast pacing, and a crisp opening hook."
 }`;
 
     let resultText = '';
@@ -146,38 +218,36 @@ Output a single valid JSON object with EXACTLY this structure (do NOT enclose in
       throw lastError || new Error('All AI model attempts timed out. Please try again.');
     }
 
-    // Parse clean JSON
-    let contentPack;
-    try {
-      const jsonStart = resultText.indexOf('{');
-      const jsonEnd = resultText.lastIndexOf('}');
-      if (jsonStart === -1 || jsonEnd === -1) {
-        throw new Error('No JSON brackets found in response');
-      }
-      const cleanJson = resultText.substring(jsonStart, jsonEnd + 1);
-      contentPack = JSON.parse(cleanJson);
-    } catch {
-      console.error('Failed to parse JSON:', resultText);
+    const contentPack = safeParseJSON(resultText);
+    if (!contentPack || typeof contentPack !== 'object') {
       return NextResponse.json({ error: 'AI returned invalid output structure. Please retry.' }, { status: 500 });
     }
 
-    // If logged in, save to database
+    // Normalize output structure ensuring all fields are valid
+    const normalized = {
+      blogPost: typeof contentPack.blogPost === 'string' ? contentPack.blogPost : 'Content generated successfully.',
+      linkedinPost: typeof contentPack.linkedinPost === 'string' ? contentPack.linkedinPost : '',
+      tweets: Array.isArray(contentPack.tweets) ? contentPack.tweets.map(String) : [],
+      shortScript: typeof contentPack.shortScript === 'string' ? contentPack.shortScript : ''
+    };
+
+    // If logged in, save to Supabase
     if (user && supabase) {
       try {
         await supabase.from('content_packs').insert({
           user_id: user.id,
-          youtube_url: url,
-          blog_post: contentPack.blogPost,
-          linkedin_post: contentPack.linkedinPost,
-          tweets: contentPack.tweets,
-          short_script: contentPack.shortScript,
+          youtube_url: rawUrl,
+          blog_post: normalized.blogPost,
+          linkedin_post: normalized.linkedinPost,
+          tweets: normalized.tweets,
+          short_script: normalized.shortScript,
         });
       } catch (dbErr) {
         console.error('Database save error (non-fatal):', dbErr);
       }
     }
 
-    return NextResponse.json(contentPack);
+    return NextResponse.json(normalized);
 
   } catch (error: unknown) {
     if (error instanceof Error) {
